@@ -21,79 +21,55 @@
 
 extern void crash(const char* str);
 
-struct GDT_entry{
-    uint16_t limit;
-    uint16_t base1;
-    uint8_t  base2;
+struct GDTpointer {
+    unsigned short limit; // gdt size
+    unsigned long  base;  // virtual address of GDT
+} __attribute__((packed));
+
+
+// RGDT entry
+struct GDTentry{
+    uint16_t limit_low;
+    uint16_t base_low;
+    uint8_t  base_middle;
     uint8_t  access;
-    uint8_t  flags_and_limit;
-    uint8_t  base3;
-}__attribute__((packed));
+    uint8_t  granularity;
+    uint8_t  base_high;
+} __attribute__((packed));
 
-struct GDT_unencoded{
-    uint32_t limit;
-    uint32_t base;
-    uint8_t access;
-    uint8_t flags;
-};
+typedef struct GDTentry gdt_entry_t;
 
-struct GDT_entry GDTentries[6];
+gdt_entry_t gdt_entries[5];
+struct GDTpointer gdt_ptr;
 
-struct GDT_unencoded GDTentry;
+void setGDTgate(int num, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran) {
+    gdt_entries[num].base_low    = (base & 0xFFFF);
+    gdt_entries[num].base_middle = (base >> 16) & 0xFF;
+    gdt_entries[num].base_high   = (base >> 24) & 0xFF;
 
-void GDT_encodeEntry(int item, struct GDT_unencoded source){
-    GDTentries[item].base1 = (source.base & 0xFFFF);
-    GDTentries[item].base2 = (source.base >> 16) & 0xFF;
-    GDTentries[item].base3 = (source.base >> 24) & 0xFF;
+    gdt_entries[num].limit_low   = (limit & 0xFFFF);
+    gdt_entries[num].granularity = (limit >> 16) & 0x0F;
 
-    GDTentries[item].limit = (source.limit & 0xFFFF);
-    GDTentries[item].flags_and_limit = (source.limit >> 16) & 0x0F;
-    GDTentries[item].flags_and_limit |= (source.flags & 0xF0);
-
-    GDTentries[item].access = source.access;
+    gdt_entries[num].granularity |= gran & 0xF0;
+    gdt_entries[num].access      = access;
 }
 
-extern void setGdt(uint64_t);
+extern void gdt_flush(uint64_t gdt_ptr_addr);
 
 void init_GDT(){
-    // blank entry
-    GDTentry.limit           = 0;
-    GDTentry.base            = 0;
-    GDTentry.access          = 0;
-    GDTentry.flags           = 0;
+    gdt_ptr.limit = (sizeof(gdt_entry_t) * 3) - 1;
+    gdt_ptr.base  = (uint64_t)&gdt_entries;
 
-    GDT_encodeEntry(0, GDTentry);
+    setGDTgate(0, 0, 0, 0, 0); //null
 
-    GDTentry.limit           = 0xFFFFF;
-    GDTentry.base            = 0;
-    GDTentry.access          = 0x9A;
-    GDTentry.flags           = 0xA;
+    setGDTgate(1, 0, 0xFFFFFFFF, 0x9A, 0xA0); // kernel code
 
-    GDT_encodeEntry(1, GDTentry);
-
-    GDTentry.limit           = 0xFFFFF;
-    GDTentry.base            = 0;
-    GDTentry.access          = 0x92;
-    GDTentry.flags           = 0xC;
-
-    GDT_encodeEntry(2, GDTentry);
+    setGDTgate(2, 0, 0xFFFFFFFF, 0x92, 0xC0);// kernel data
 
 
-    GDTentry.limit           = 0xFFFFF;
-    GDTentry.base            = 0;
-    GDTentry.access          = 0xFA;
-    GDTentry.flags           = 0xA;
+    setGDTgate(3, 0, 0xFFFFFFFF, 0xFA, 0xA0); // user code
 
-    GDT_encodeEntry(3, GDTentry);
+    setGDTgate(4, 0, 0xFFFFFFFF, 0xF2, 0xC0); // user data
 
-
-    GDTentry.limit           = 0xFFFFF;
-    GDTentry.base            = 0;
-    GDTentry.access          = 0xF2;
-    GDTentry.flags           = 0xC;
-
-    GDT_encodeEntry(4, GDTentry);
-
-    setGdt((uint64_t)&GDTentries);
-
+    gdt_flush((uint64_t)&gdt_ptr);
 }

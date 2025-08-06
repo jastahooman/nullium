@@ -87,10 +87,11 @@ void stage2_boot(void){
     putstr(" OS edition", gfx_resX / 2 - 180 + ((font_width + 1)* (5 + sizeof(bootLdrName) + sizeof(CPUArch))) , gfx_resY / 4 + 30, 0x777777);
 
 
+    
     shadowTxt("Loaded Elements:", ((font_height + 4) * 1) - 3, gfx_resY - ((font_height + 4) * 3) - 3, 0xFFFF00, 0x000000);
     init_GDT();
 
-    // PLACEHOLDER!!!
-    shadowTxt("GDT", ((font_height + 4) * 1) - 3, gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
+    shadowTxt("GDT", ((font_width + 1) * 1), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
+    putstr("GDT init ... OK lololol", 2, 2, 0x0055CC); // shhhhh :^)
 
 }
