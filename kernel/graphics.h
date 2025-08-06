@@ -16,6 +16,10 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+
+#include <stdint.h>
+#include <stdbool.h>
+
 void putltr(uint64_t px, uint64_t py, uint32_t color, int letter);
 
 void putRect(uint64_t px, uint64_t py, uint32_t color);

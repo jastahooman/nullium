@@ -65,6 +65,7 @@ limine-bin:
 		$(OUT)$(KERNEL)graphics.o\
 		$(OUT)$(KERNEL)krnlBitmaps.o\
 		$(OUT)$(KERNEL)gdt.o\
+		$(OUT)$(KERNEL)gdtASM.o\
 	 -lgcc -fPIC
 binary:
 	mkdir -p $(OUT)
@@ -77,3 +78,5 @@ binary:
 	$(GCC) -c $(KERNEL)archspecific/x86_64/gdt.c -o $(OUT)$(KERNEL)gdt.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
 
 	$(GCC) -c $(KERNEL)krnlBitmaps.c -o $(OUT)$(KERNEL)krnlBitmaps.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
+
+	nasm -felf64 $(KERNEL)archspecific/x86_64/gdt.s -o $(OUT)$(KERNEL)gdtASM.o
