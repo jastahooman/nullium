@@ -89,6 +89,8 @@ void stage2_boot(void){
 
     shadowTxt("Loaded Elements:", ((font_height + 4) * 1) - 3, gfx_resY - ((font_height + 4) * 3) - 3, 0xFFFF00, 0x000000);
     init_GDT();
+
+    // PLACEHOLDER!!!
     shadowTxt("GDT", ((font_height + 4) * 1) - 3, gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
 
 }
