@@ -51,7 +51,7 @@ inst-limineISO:
 inst-limineIMG:
 
 limine-x64:
-	make binary
+	make binary-x86_64
 	make limine-bin
 	make inst-limineISO
 
@@ -71,7 +71,7 @@ limine-bin:
 		$(OUT)$(KERNEL)utils-x86.o\
 		$(OUT)$(KERNEL)pic.o\
 	 -lgcc -fPIC
-binary:
+binary-x86_64:
 	mkdir -p $(OUT)
 	mkdir -p $(OUT)$(KERNEL)
 
