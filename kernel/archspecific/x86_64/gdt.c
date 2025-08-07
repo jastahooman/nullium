@@ -19,7 +19,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-extern void crash(const char* str);
+
 
 struct GDTpointer {
     unsigned short limit; // gdt size
@@ -55,6 +55,8 @@ void setGDTgate(int num, uint32_t base, uint32_t limit, uint8_t access, uint8_t 
 }
 
 extern void gdt_flush(uint64_t gdt_ptr_addr);
+
+#define GDT_KERNEL_CODE 1
 
 void init_GDT(){
     gdt_ptr.limit = (sizeof(gdt_entry_t) * 3) - 1;

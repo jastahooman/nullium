@@ -16,7 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-// Mid level kernel
+// Stage 2 boot for x86 processors.
 
 #include "st2Boot-x86.h"
 
@@ -57,12 +57,9 @@ void crash(const char* str){
     putstr("Operating System version:", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5 + ((font_height + 4) * 4), 0x000000);
     putstr("    Nullium\n    version 1.0 Update 0", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5 + ((font_height + 4) * 5), 0x000000);
 
-    putstr("Crash Reason: ", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5 + ((font_height + 4) * 8), 0x000000);
-    putstr(str, (gfx_resX / 4) + 5 + ((font_width + 1) * 14), (gfx_resY / 4) + 5 + ((font_height + 4) * 8), 0x000000);
+    putstr("Crash Reason: ", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5 + ((font_height + 4) * 9), 0x000000);
+    putstr(str, (gfx_resX / 4) + 5 + ((font_width + 1) * 0), (gfx_resY / 4) + 5 + ((font_height + 4) * 10), 0x000000);
 
-    putstr("( i ) Interrupts are disabled...", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5 + ((font_height + 4) * 10), 0x000000);
-    asm ("cli");
-    putstr("( i ) Processor halted.", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5 + ((font_height + 4) * 11), 0x000000);
     for (;;) {
         asm ("hlt");
     }
@@ -86,12 +83,18 @@ void stage2_boot(void){
     putstr(CPUArch, gfx_resX / 2 - 180 + ((font_width + 1)* (6 + sizeof(bootLdrName))) , gfx_resY / 4 + 30, 0x777777);
     putstr(" OS edition", gfx_resX / 2 - 180 + ((font_width + 1)* (5 + sizeof(bootLdrName) + sizeof(CPUArch))) , gfx_resY / 4 + 30, 0x777777);
 
-
     
     shadowTxt("Loaded Elements:", ((font_height + 4) * 1) - 3, gfx_resY - ((font_height + 4) * 3) - 3, 0xFFFF00, 0x000000);
     init_GDT();
 
-    shadowTxt("GDT", ((font_width + 1) * 1), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
-    putstr("GDT init ... OK lololol", 2, 2, 0x0055CC); // shhhhh :^)
+    shadowTxt("GDT|", ((font_width + 1) * 1), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
+    putstr("GDT init ... OK :^P", 2, 2, 0x2255CC); // shhhhh :^)
+    
+    init_IDT();
+    shadowTxt("IDT|", ((font_width + 1) * 1), gfx_resY - ((font_height + 4) * 1) - 3, 0xFFFFFF, 0x000000);
 
+    // TO BE ADDED:
+    //shadowTxt("PIC Timer", ((font_width + 1) * 5), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
+
+    
 }

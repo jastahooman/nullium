@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "stdint.h": "c",
+        "lv1io.h": "c",
+        "st2boot-x86.h": "c",
+        "utils-x86.h": "c"
+    }
+}

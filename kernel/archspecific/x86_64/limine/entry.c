@@ -97,6 +97,8 @@ void kmain(void) {
 
     stage2_boot();
     
+    __asm__ volatile ("cli");
+    
     hcf();
 }
 

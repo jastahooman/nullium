@@ -66,17 +66,28 @@ limine-bin:
 		$(OUT)$(KERNEL)krnlBitmaps.o\
 		$(OUT)$(KERNEL)gdt.o\
 		$(OUT)$(KERNEL)gdtASM.o\
+		$(OUT)$(KERNEL)idt.o\
+		$(OUT)$(KERNEL)idtASM.o\
+		$(OUT)$(KERNEL)utils-x86.o\
+		$(OUT)$(KERNEL)pic.o\
 	 -lgcc -fPIC
 binary:
 	mkdir -p $(OUT)
 	mkdir -p $(OUT)$(KERNEL)
 
-	$(GCC) -c $(KERNEL)archspecific/stage2-x86.c -o $(OUT)$(KERNEL)stage2.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
+	$(GCC) -c $(KERNEL)archspecific/x86_general/stage2-x86.c -o $(OUT)$(KERNEL)stage2.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
 	$(GCC) -c $(KERNEL)utils.c -o $(OUT)$(KERNEL)utils.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
+	$(GCC) -c $(KERNEL)utils-x86.c -o $(OUT)$(KERNEL)utils-x86.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
+
 	$(GCC) -c $(KERNEL)graphics.c -o $(OUT)$(KERNEL)graphics.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
 
 	$(GCC) -c $(KERNEL)archspecific/x86_64/gdt.c -o $(OUT)$(KERNEL)gdt.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
 
-	$(GCC) -c $(KERNEL)krnlBitmaps.c -o $(OUT)$(KERNEL)krnlBitmaps.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
+	$(GCC) -c $(KERNEL)archspecific/x86_64/pic.c -o $(OUT)$(KERNEL)pic.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
 
-	nasm -felf64 $(KERNEL)archspecific/x86_64/gdt.s -o $(OUT)$(KERNEL)gdtASM.o
+
+	$(GCC) -c $(KERNEL)krnlBitmaps.c -o $(OUT)$(KERNEL)krnlBitmaps.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
+	$(GCC) -c $(KERNEL)archspecific/x86_64/idt.c -o $(OUT)$(KERNEL)idt.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
+
+	$(NASM) -felf64 $(KERNEL)archspecific/x86_64/gdt.s -o $(OUT)$(KERNEL)gdtASM.o
+	$(NASM) -felf64 $(KERNEL)archspecific/x86_64/idt.s -o $(OUT)$(KERNEL)idtASM.o

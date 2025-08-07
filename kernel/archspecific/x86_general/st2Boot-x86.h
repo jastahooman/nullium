@@ -16,12 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <stdint.h>
-#include <stddef.h>
-#include <stdbool.h>
+void init_GDT();
+void init_IDT();
 
-void *memcpy(void *dest, const void *src, size_t n);
-void *memset(void *s, int c, size_t n);
-void *memmove(void *dest, const void *src, size_t n);
-int memcmp(const void *s1, const void *s2, size_t n);
-unsigned int getstrsz(const char* str);
+void init_PIC(int offset1, int offset2);
