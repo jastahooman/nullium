@@ -1,0 +1,132 @@
+/*
+    The Nullium Operating System
+    Copyright (C) 2025, jastahooman
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+#include <stdint.h>
+#include <stdbool.h>
+#include "multiboot2.h"
+const char* bootLdrName;
+const char* CPUArch;
+
+extern uint64_t gfx_resX;
+extern uint64_t gfx_resY;
+extern uint64_t gfx_bpp;
+
+
+struct fb_struct{
+    uint16_t type;
+    uint16_t flags;
+    uint32_t pitch;
+    uint32_t width;
+    uint32_t height;
+    uint32_t depth;
+    void * addr;
+};
+
+struct fb_struct fb_Info;
+
+extern void stage2_boot(void);
+
+void gfx_plotPixel(uint64_t x, uint64_t y, uint32_t color){
+    if (!(x > fb_Info.width || y > fb_Info.height)){
+        volatile uint32_t *fb_ptr = fb_Info.addr;
+        fb_ptr[y * (fb_Info.pitch / 4) + x] = color;
+    }
+    
+}
+
+void stage1_boot (unsigned long magic, unsigned long addr){  
+    struct multiboot_tag *tag;
+
+    if (magic != MULTIBOOT2_BOOTLOADER_MAGIC)
+    {
+      for(;;);
+    }
+
+    for (tag = (struct multiboot_tag *) (addr + 8);
+       tag->type != MULTIBOOT_TAG_TYPE_END;
+       tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag 
+                                       + ((tag->size + 7) & ~7)))
+    {
+        switch (tag->type){
+        
+        case MULTIBOOT_TAG_TYPE_FRAMEBUFFER:
+          {
+            multiboot_uint32_t color;
+            unsigned i;
+            struct multiboot_tag_framebuffer *tagfb
+              = (struct multiboot_tag_framebuffer *) tag;
+            
+            fb_Info.height = tagfb->common.framebuffer_height;
+            fb_Info.width = tagfb->common.framebuffer_width;
+            fb_Info.pitch = tagfb->common.framebuffer_pitch;
+            fb_Info.depth = tagfb->common.framebuffer_bpp;
+            fb_Info.addr = (void *) (unsigned long) tagfb->common.framebuffer_addr;
+            
+
+            switch (tagfb->common.framebuffer_type)
+              {
+              case MULTIBOOT_FRAMEBUFFER_TYPE_INDEXED:
+                {
+                  unsigned best_distance, distance;
+                  struct multiboot_color *palette;
+            
+                  palette = tagfb->framebuffer_palette;
+
+                  
+
+                  color = 0;
+                  best_distance = 4*256*256;
+            
+                  for (i = 0; i < tagfb->framebuffer_palette_num_colors; i++)
+                    {
+                      distance = (0xff - palette[i].blue) 
+                        * (0xff - palette[i].blue)
+                        + palette[i].red * palette[i].red
+                        + palette[i].green * palette[i].green;
+                      if (distance < best_distance)
+                        {
+                          color = i;
+                          best_distance = distance;
+                        }
+                    }
+                }
+                break;
+
+              case MULTIBOOT_FRAMEBUFFER_TYPE_RGB:
+                color = ((1 << tagfb->framebuffer_blue_mask_size) - 1) 
+                  << tagfb->framebuffer_blue_field_position;
+                break;
+
+              default:
+                color = 0xffffffff;
+                break;
+            }
+          }
+        }
+        
+    }
+
+    gfx_resX = fb_Info.width;
+    gfx_resY = fb_Info.height;
+    gfx_bpp  = fb_Info.depth;
+    bootLdrName = "Multiboot 2 ";
+    CPUArch = "32-bit x86  ";
+
+    stage2_boot();
+    
+}

@@ -66,6 +66,7 @@ void crash(const char* str){
 }
 
 
+
 void stage2_boot(void){
 
     gfx_plotPixel(3, 3, 0xAAAAAA);
@@ -79,22 +80,24 @@ void stage2_boot(void){
     putstr("Welcome to Nullium...", gfx_resX / 2 - 102, gfx_resY / 4 - 20, 0x000000);
     putstr("Using ", gfx_resX / 2 - 180, gfx_resY / 4 + 30, 0x777777);
     putstr(bootLdrName, gfx_resX / 2 - 180 + ((font_width + 1)* 6), gfx_resY / 4 + 30, 0x777777);
-    putstr(", ", gfx_resX / 2 - 180 + ((font_width + 1)* (4 + sizeof(bootLdrName))) , gfx_resY / 4 + 30, 0x777777);
-    putstr(CPUArch, gfx_resX / 2 - 180 + ((font_width + 1)* (6 + sizeof(bootLdrName))) , gfx_resY / 4 + 30, 0x777777);
-    putstr(" OS edition", gfx_resX / 2 - 180 + ((font_width + 1)* (5 + sizeof(bootLdrName) + sizeof(CPUArch))) , gfx_resY / 4 + 30, 0x777777);
+    putstr(", ", gfx_resX / 2 - 180 + ((font_width + 1)* (4 + 13)) , gfx_resY / 4 + 30, 0x777777);
+    putstr(CPUArch, gfx_resX / 2 - 180 + ((font_width + 1)* (6 + 13)) , gfx_resY / 4 + 30, 0x777777);
+    putstr(" OS edition", gfx_resX / 2 - 180 + ((font_width + 1)* (5 + 13 + 12)) , gfx_resY / 4 + 30, 0x777777);
 
     
     shadowTxt("Loaded Elements:", ((font_height + 4) * 1) - 3, gfx_resY - ((font_height + 4) * 3) - 3, 0xFFFF00, 0x000000);
-    init_GDT();
-
-    shadowTxt("GDT|", ((font_width + 1) * 1), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
-    putstr("GDT init ... OK :^P", 2, 2, 0x2255CC); // shhhhh :^)
     
-    init_IDT();
-    shadowTxt("IDT|", ((font_width + 1) * 1), gfx_resY - ((font_height + 4) * 1) - 3, 0xFFFFFF, 0x000000);
+
+    //shadowTxt("GDT|", ((font_width + 1) * 1), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
+    //putstr("GDT init ... OK :^P", 2, 2, 0x2255CC); // shhhhh :^)
+    
+    //shadowTxt("IDT|", ((font_width + 1) * 1), gfx_resY - ((font_height + 4) * 1) - 3, 0xFFFFFF, 0x000000);
 
     // TO BE ADDED:
     //shadowTxt("PIC Timer", ((font_width + 1) * 5), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
 
     
+
+    
+
 }

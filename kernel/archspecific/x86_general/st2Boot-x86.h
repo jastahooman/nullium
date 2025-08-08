@@ -15,8 +15,3 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-
-void init_GDT();
-void init_IDT();
-
-void init_PIC(int offset1, int offset2);

@@ -1,0 +1,21 @@
+case MULTIBOOT_TAG_TYPE_CMDLINE:
+            // (struct multiboot_tag_string *) tag)
+          break;
+        case MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME:
+            // ((struct multiboot_tag_string *) tag)
+          break;
+        case MULTIBOOT_TAG_TYPE_MODULE:
+            // ((struct multiboot_tag_module *) tag)
+          break;
+        case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
+          // (struct multiboot_tag_basic_meminfo *) tag)
+          break;
+        case MULTIBOOT_TAG_TYPE_BOOTDEV:
+            // (struct multiboot_tag_bootdev *) tag)
+          break;
+        case MULTIBOOT_TAG_TYPE_MMAP:
+          {
+            // multiboot_memory_map_t *mmap;
+
+          }
+          break;
