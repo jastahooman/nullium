@@ -14,16 +14,35 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+*/    
+    
 
-void putltr(uint64_t px, uint64_t py, uint32_t color, int letter);
+// Window manager...
+#include <drivers/lv1io.h>
+#include <drivers/graphics.h>
+#include <drivers/lv2io.h>
+#include <krnlBitmaps.h>
 
-void putRect(uint64_t px, uint64_t py, uint32_t color);
-void gfx_wireRect(uint64_t px, uint64_t py, uint64_t width, uint64_t height, uint32_t color);
 
-void putstr(const char* str, uint64_t px, uint64_t py, uint32_t color);
+void drawMenuBar(){
+    gfx_putRect(0, 0, gfx_resX, 19, 0x000000);
+    gfx_putRect(0, 0, gfx_resX, 17, 0xFFFFFF);
 
-void gfx_putRect(uint64_t px, uint64_t py, uint64_t width, uint64_t height, uint32_t color);
-void drawCurs(uint64_t posx, uint64_t posy, uint8_t cursor);
+    unsigned int idx = 0;
+    // Nullium logo
+    for(unsigned int y = 0; y < 12; y++){
 
-void shadowTxt(const char* str, uint64_t px, uint64_t py, uint32_t color, uint32_t shadowClr);
+        for(unsigned int x = 0; x < 12; x++){
+
+            
+                
+            if (menuBtn[idx] == 1){
+                gfx_plotPixel(x + 2, y + 2, 0x000000);
+
+            }
+            idx++;
+        }
+    }
+
+
+}

@@ -15,9 +15,9 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#include "utils.h"
-#include "krnlBitmaps.h"
-#include "lv1io.h"
+#include <utils/utils.h>
+#include <krnlBitmaps.h>
+#include <drivers/lv1io.h>
 
 void gfx_wireRect(uint64_t px, uint64_t py, uint64_t width, uint64_t height, uint32_t color){
     uint64_t x = px;

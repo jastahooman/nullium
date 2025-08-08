@@ -20,13 +20,13 @@
 
 #include "st2Boot-x86.h"
 
-#include "../../winmgr.h"
+#include <stage3/winmgr.h>
 
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
 #include "lv1io.h"
-#include "graphics.h"
+#include <drivers/graphics.h>
 #include "krnlBitmaps.h"
 
 uint64_t gfx_resX;

@@ -40,7 +40,7 @@ inst-limineISO:
 
 	cp -v $(OUT)nullium.bin $(OUT)$(KERNEL)limine-ISO/nullium/os.nlp
 
-	cp -v $(KERNEL)archspecific/i686/limine.conf $(OUT)$(KERNEL)limine-ISO/boot/limine.conf
+	cp -v $(KERNEL)arch/i686/limine.conf $(OUT)$(KERNEL)limine-ISO/boot/limine.conf
 	
 
 
@@ -65,25 +65,25 @@ mboot2-i686:
 
 bin-i686:
 	
-	$(GCC) -c $(KERNEL)krnlBitmaps.c -o $(OUT)$(KERNEL)krnlBitmaps.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
-	$(GCC) -c $(KERNEL)graphics.c -o $(OUT)$(KERNEL)graphics.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
+	$(GCC) -c $(KERNEL)stage3/krnlBitmaps.c -o $(OUT)$(KERNEL)krnlBitmaps.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
+	$(GCC) -c $(KERNEL)drivers/graphics.c -o $(OUT)$(KERNEL)graphics.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
 	
-	$(GCC) -c $(KERNEL)utils.c -o $(OUT)$(KERNEL)utils.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
-	$(GCC) -c $(KERNEL)winmgr.c -o $(OUT)$(KERNEL)winmgr.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
+	$(GCC) -c $(KERNEL)utils/utils.c -o $(OUT)$(KERNEL)utils.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
+	$(GCC) -c $(KERNEL)stage3/winmgr.c -o $(OUT)$(KERNEL)winmgr.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
 	
 	
 
 	# Architecture specific:
 
-	$(GCC) -c $(KERNEL)utils-x86.c -o $(OUT)$(KERNEL)utils86.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
-	$(GCC) -c $(KERNEL)utils-x86.c -o $(OUT)$(KERNEL)utils86.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
-	$(GCC) -c $(KERNEL)archspecific/x86_general/stage2-x86.c -o $(OUT)$(KERNEL)stage2.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
+	$(GCC) -c $(KERNEL)utils/utils-x86.c -o $(OUT)$(KERNEL)utils86.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
+	$(GCC) -c $(KERNEL)utils/utils-x86.c -o $(OUT)$(KERNEL)utils86.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
+	$(GCC) -c $(KERNEL)arch/x86_general/stage2-x86.c -o $(OUT)$(KERNEL)stage2.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
 	
-	$(GCC) -c $(KERNEL)archspecific/i686/gdt.c -o $(OUT)$(KERNEL)gdt.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
-	$(NASM) -felf32 $(KERNEL)archspecific/i686/gdt.s -o $(OUT)$(KERNEL)gdtASM.o
+	$(GCC) -c $(KERNEL)arch/i686/gdt.c -o $(OUT)$(KERNEL)gdt.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
+	$(NASM) -felf32 $(KERNEL)arch/i686/gdt.s -o $(OUT)$(KERNEL)gdtASM.o
 	
-	$(GCC) -c $(KERNEL)archspecific/i686/idt.c -o $(OUT)$(KERNEL)idt.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
-	$(NASM) -felf32 $(KERNEL)archspecific/i686/idt.s -o $(OUT)$(KERNEL)idtASM.o
+	$(GCC) -c $(KERNEL)arch/i686/idt.c -o $(OUT)$(KERNEL)idt.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
+	$(NASM) -felf32 $(KERNEL)arch/i686/idt.s -o $(OUT)$(KERNEL)idtASM.o
 
 	
 		
@@ -91,11 +91,11 @@ bin-i686:
 
 mboot2-bin:
 	
-	$(NASM) -felf32 $(KERNEL)archspecific/i686/entry.s -o $(OUT)$(KERNEL)entry.o
-	$(GCC) -c $(KERNEL)archspecific/i686/stage1.c -o $(OUT)$(KERNEL)stage1.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
+	$(NASM) -felf32 $(KERNEL)arch/i686/entry.s -o $(OUT)$(KERNEL)entry.o
+	$(GCC) -c $(KERNEL)arch/i686/stage1.c -o $(OUT)$(KERNEL)stage1.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
 	
 
-	$(GCC) -T $(KERNEL)archspecific/i686/linker.ld -o $(OUT)nullium.bin -ffreestanding -O2 -nostdlib\
+	$(GCC) -T $(KERNEL)arch/i686/linker.ld -o $(OUT)nullium.bin -ffreestanding -O2 -nostdlib\
 		$(OUT)$(KERNEL)entry.o\
 		$(OUT)$(KERNEL)stage1.o\
 		$(OUT)$(KERNEL)stage2.o\

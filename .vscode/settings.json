@@ -10,6 +10,7 @@
         "graphics.h": "c",
         "lv2io.h": "c",
         "krnlbitmaps.h": "c",
-        "winmgr.h": "c"
+        "winmgr.h": "c",
+        "idt.h": "c"
     }
 }
