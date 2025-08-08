@@ -78,9 +78,14 @@ bin-i686:
 	$(GCC) -c $(KERNEL)utils-x86.c -o $(OUT)$(KERNEL)utils86.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
 	$(GCC) -c $(KERNEL)utils-x86.c -o $(OUT)$(KERNEL)utils86.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
 	$(GCC) -c $(KERNEL)archspecific/x86_general/stage2-x86.c -o $(OUT)$(KERNEL)stage2.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
+	
 	$(GCC) -c $(KERNEL)archspecific/i686/gdt.c -o $(OUT)$(KERNEL)gdt.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
-
 	$(NASM) -felf32 $(KERNEL)archspecific/i686/gdt.s -o $(OUT)$(KERNEL)gdtASM.o
+	
+	$(GCC) -c $(KERNEL)archspecific/i686/idt.c -o $(OUT)$(KERNEL)idt.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
+	$(NASM) -felf32 $(KERNEL)archspecific/i686/idt.s -o $(OUT)$(KERNEL)idtASM.o
+
+	
 		
 
 
@@ -101,6 +106,8 @@ mboot2-bin:
 		$(OUT)$(KERNEL)gdt.o\
 		$(OUT)$(KERNEL)gdtASM.o\
 		$(OUT)$(KERNEL)winmgr.o\
+		$(OUT)$(KERNEL)idtASM.o\
+		$(OUT)$(KERNEL)idt.o\
 
 	 -lgcc -fPIC
 

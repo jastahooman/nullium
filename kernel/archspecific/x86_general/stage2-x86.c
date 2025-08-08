@@ -92,9 +92,10 @@ void stage2_boot(void){
     shadowTxt("GDT|", ((font_width + 1) * 1), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
     putstr("GDT init ... OK :^P", 2, 2, 0x2255CC); // shhhhh :^)
     init_GDT();
-    
-    //shadowTxt("IDT|", ((font_width + 1) * 1), gfx_resY - ((font_height + 4) * 1) - 3, 0xFFFFFF, 0x000000);
 
+    shadowTxt("IDT|", ((font_width + 1) * 1), gfx_resY - ((font_height + 4) * 1) - 3, 0xFFFFFF, 0x000000);
+    init_IDT();
+    
     // TO BE ADDED:
     //shadowTxt("PIC Timer", ((font_width + 1) * 5), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
 

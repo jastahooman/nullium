@@ -18,3 +18,4 @@
 
 
 void init_GDT();
+void init_IDT();
