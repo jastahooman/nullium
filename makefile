@@ -64,17 +64,25 @@ mboot2-i686:
 	make inst-limineISO
 
 bin-i686:
-	$(GCC) -c $(KERNEL)archspecific/x86_general/stage2-x86.c -o $(OUT)$(KERNEL)stage2.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
 	
 	$(GCC) -c $(KERNEL)krnlBitmaps.c -o $(OUT)$(KERNEL)krnlBitmaps.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
 	$(GCC) -c $(KERNEL)graphics.c -o $(OUT)$(KERNEL)graphics.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
 	
 	$(GCC) -c $(KERNEL)utils.c -o $(OUT)$(KERNEL)utils.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
+	$(GCC) -c $(KERNEL)winmgr.c -o $(OUT)$(KERNEL)winmgr.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
 	
-	$(GCC) -c $(KERNEL)utils-x86.c -o $(OUT)$(KERNEL)utils86.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
 	
 
-	
+	# Architecture specific:
+
+	$(GCC) -c $(KERNEL)utils-x86.c -o $(OUT)$(KERNEL)utils86.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
+	$(GCC) -c $(KERNEL)utils-x86.c -o $(OUT)$(KERNEL)utils86.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
+	$(GCC) -c $(KERNEL)archspecific/x86_general/stage2-x86.c -o $(OUT)$(KERNEL)stage2.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
+	$(GCC) -c $(KERNEL)archspecific/i686/gdt.c -o $(OUT)$(KERNEL)gdt.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
+
+	$(NASM) -felf32 $(KERNEL)archspecific/i686/gdt.s -o $(OUT)$(KERNEL)gdtASM.o
+		
+
 
 mboot2-bin:
 	
@@ -90,6 +98,10 @@ mboot2-bin:
 		$(OUT)$(KERNEL)graphics.o\
 		$(OUT)$(KERNEL)utils.o\
 		$(OUT)$(KERNEL)utils86.o\
+		$(OUT)$(KERNEL)gdt.o\
+		$(OUT)$(KERNEL)gdtASM.o\
+		$(OUT)$(KERNEL)winmgr.o\
+
 	 -lgcc -fPIC
 
 	

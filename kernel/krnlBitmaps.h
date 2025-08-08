@@ -29,3 +29,5 @@ extern uint8_t cursors[1][165];
 extern bool font_regular[100][77];
 
 extern char fontMap[100];
+
+extern bool menuBtn[144];

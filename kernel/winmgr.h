@@ -16,5 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <stdint.h>
+#include <stdbool.h>
 
-void init_GDT();
+extern void drawMenuBar();

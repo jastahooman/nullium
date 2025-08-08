@@ -16,5 +16,10 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <stdint.h>
+#include <stddef.h>
+#include <stdbool.h>
 
-void init_GDT();
+extern uint64_t gfx_resX;
+extern uint64_t gfx_resY;
+extern uint64_t gfx_bpp;

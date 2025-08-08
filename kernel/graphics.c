@@ -50,6 +50,8 @@ void gfx_putRect(uint64_t px, uint64_t py, uint64_t width, uint64_t height, uint
     }
 }
 
+
+
 void drawCurs(uint64_t px, uint64_t py, uint8_t cursor){
     unsigned int idx = 0;
 

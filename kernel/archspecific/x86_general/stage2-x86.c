@@ -20,11 +20,12 @@
 
 #include "st2Boot-x86.h"
 
+#include "../../winmgr.h"
+
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
 #include "lv1io.h"
-
 #include "graphics.h"
 #include "krnlBitmaps.h"
 
@@ -76,7 +77,7 @@ void stage2_boot(void){
 
     gfx_putRect(gfx_resX / 2 - 200, gfx_resY / 4 - 50, 404, 104, 0x000000);
     gfx_putRect(gfx_resX / 2 - 202, gfx_resY / 4 - 52, 404, 104, 0x000000);
-    gfx_putRect(gfx_resX / 2 - 200, gfx_resY / 4 - 50, 400, 100, 0xCCCCCC);
+    gfx_putRect(gfx_resX / 2 - 200, gfx_resY / 4 - 50, 400, 100, 0xFFFFFF);
     putstr("Welcome to Nullium...", gfx_resX / 2 - 102, gfx_resY / 4 - 20, 0x000000);
     putstr("Using ", gfx_resX / 2 - 180, gfx_resY / 4 + 30, 0x777777);
     putstr(bootLdrName, gfx_resX / 2 - 180 + ((font_width + 1)* 6), gfx_resY / 4 + 30, 0x777777);
@@ -88,16 +89,32 @@ void stage2_boot(void){
     shadowTxt("Loaded Elements:", ((font_height + 4) * 1) - 3, gfx_resY - ((font_height + 4) * 3) - 3, 0xFFFF00, 0x000000);
     
 
-    //shadowTxt("GDT|", ((font_width + 1) * 1), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
-    //putstr("GDT init ... OK :^P", 2, 2, 0x2255CC); // shhhhh :^)
+    shadowTxt("GDT|", ((font_width + 1) * 1), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
+    putstr("GDT init ... OK :^P", 2, 2, 0x2255CC); // shhhhh :^)
+    init_GDT();
     
     //shadowTxt("IDT|", ((font_width + 1) * 1), gfx_resY - ((font_height + 4) * 1) - 3, 0xFFFFFF, 0x000000);
 
     // TO BE ADDED:
     //shadowTxt("PIC Timer", ((font_width + 1) * 5), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
 
-    
+    for(;;);
 
-    
+    gfx_plotPixel(3, 3, 0xAAAAAA);
+    //gfx_putRect(0, 0, gfx_resX, gfx_resY, 0x5500AA);
+    gfx_putRect(0, 0, gfx_resX, gfx_resY, 0x0055AA);
 
+
+    gfx_putRect(gfx_resX / 2 - 200, gfx_resY / 4 - 50, 404, 104, 0x000000);
+    gfx_putRect(gfx_resX / 2 - 202, gfx_resY / 4 - 52, 404, 104, 0x000000);
+    gfx_putRect(gfx_resX / 2 - 200, gfx_resY / 4 - 50, 400, 100, 0xFFFFFF);
+
+    putstr("Welcome to Nullium...", gfx_resX / 2 - 102, gfx_resY / 4 - 20, 0x000000);
+    
+    gfx_wireRect(gfx_resX / 2 - 200 + 10, gfx_resY / 4 + 25, 380, 15, 0x000000);
+    gfx_putRect(gfx_resX / 2 - 200 + 11, gfx_resY / 4 + 26, 378, 13, 0xDADAFF);
+    gfx_putRect(gfx_resX / 2 - 200 + 11, gfx_resY / 4 + 26, 40, 13, 0x444455);
+
+
+    drawMenuBar();
 }

@@ -6,6 +6,10 @@
         "st2boot-x86.h": "c",
         "utils-x86.h": "c",
         "multiboot2.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "graphics.h": "c",
+        "lv2io.h": "c",
+        "krnlbitmaps.h": "c",
+        "winmgr.h": "c"
     }
 }
