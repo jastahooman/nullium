@@ -20,40 +20,42 @@
 #include <stdbool.h>
 
 
-extern const uint32_t UNKNOWN;
-extern const uint32_t ESC;
-extern const uint32_t CTRL;
-extern const uint32_t LSHFT;
-extern const uint32_t RSHFT;
-extern const uint32_t ALT;
-extern const uint32_t F1;
-extern const uint32_t F2;
-extern const uint32_t F3;
-extern const uint32_t F4;
-extern const uint32_t F5;
-extern const uint32_t F6;
-extern const uint32_t F7;
-extern const uint32_t F8;
-extern const uint32_t F9;
-extern const uint32_t F1;
-extern const uint32_t F11;
-extern const uint32_t F12;
-extern const uint32_t SCRLCK;
-extern const uint32_t HOME;
-extern const uint32_t UP;
-extern const uint32_t LEFT;
-extern const uint32_t RIGHT;
-extern const uint32_t DOWN;
-extern const uint32_t PGUP;
-extern const uint32_t PGDOWN;
-extern const uint32_t END;
-extern const uint32_t INS;
-extern const uint32_t DEL;
-extern const uint32_t CAPS;
-extern const uint32_t NONE;
-extern const uint32_t ALTGR;
-extern const uint32_t NUMLCK;
+extern const uint32_t KB_UNKNOWN;
+extern const uint32_t KB_ESC;
+extern const uint32_t KB_CTRL;
+extern const uint32_t KB_LSHFT;
+extern const uint32_t KB_RSHFT;
+extern const uint32_t KB_ALT;
+extern const uint32_t KB_F1;
+extern const uint32_t KB_F2;
+extern const uint32_t KB_F3;
+extern const uint32_t KB_F4;
+extern const uint32_t KB_F5;
+extern const uint32_t KB_F6;
+extern const uint32_t KB_F7;
+extern const uint32_t KB_F8;
+extern const uint32_t KB_F9;
+extern const uint32_t KB_F1;
+extern const uint32_t KB_F11;
+extern const uint32_t KB_F12;
+extern const uint32_t KB_SCRLCK;
+extern const uint32_t KB_HOME;
+extern const uint32_t KB_UP;
+extern const uint32_t KB_LEFT;
+extern const uint32_t KB_RIGHT;
+extern const uint32_t KB_DOWN;
+extern const uint32_t KB_PGUP;
+extern const uint32_t KB_PGDOWN;
+extern const uint32_t KB_END;
+extern const uint32_t KB_INS;
+extern const uint32_t KB_DEL;
+extern const uint32_t KB_CAPS;
+extern const uint32_t KB_NONE;
+extern const uint32_t KB_ALTGR;
+extern const uint32_t KB_NUMLCK;
 
 
 extern const uint32_t kb_keys[128];
 extern bool kb_keyPresses[128];
+
+bool kb_detectPress(uint32_t key);

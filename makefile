@@ -94,6 +94,7 @@ bin-i686:
 	$(GCC) -c $(KERNEL)drivers/timer-x86.c -o $(OUT)$(KERNEL)timer86.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
 	
 	$(GCC) -c $(KERNEL)drivers/mouse-x86.c -o $(OUT)$(KERNEL)mouse86.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
+	$(GCC) -c $(KERNEL)stage3/stage3.c -o $(OUT)$(KERNEL)stage3.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
 	
 		
 
@@ -122,6 +123,7 @@ mboot2-bin:
 		$(OUT)$(KERNEL)timer.o\
 		$(OUT)$(KERNEL)keyboard.o\
 		$(OUT)$(KERNEL)mouse86.o\
+		$(OUT)$(KERNEL)stage3.o\
 	 -lgcc -fPIC
 
 	
