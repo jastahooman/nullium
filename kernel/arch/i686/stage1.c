@@ -41,6 +41,15 @@ struct fb_struct fb_Info;
 
 extern void stage2_boot(void);
 
+uint32_t gfx_getPixel(uint64_t x, uint64_t y){
+  if (!(x > fb_Info.width || y > fb_Info.height)){
+        volatile uint32_t *fb_ptr = fb_Info.addr;
+        uint32_t color = fb_ptr[y * (fb_Info.pitch / 4) + x];
+        return color;
+  }
+  return 0;
+}
+
 void gfx_plotPixel(uint64_t x, uint64_t y, uint32_t color){
     if (!(x > fb_Info.width || y > fb_Info.height)){
         volatile uint32_t *fb_ptr = fb_Info.addr;

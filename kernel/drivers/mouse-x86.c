@@ -15,10 +15,14 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-
 #include <stdint.h>
 #include <stdbool.h>
+#include <drivers/idt.h>
+#include <stdio.h>
+#include <utils/utils-x86.h>
+
 
 void Mouse_Init(){
     
 }
+

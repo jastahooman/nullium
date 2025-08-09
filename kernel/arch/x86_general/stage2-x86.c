@@ -110,9 +110,10 @@ void stage2_boot(void){
     
 
     sleep(5);
+    Mouse_Init();
     shadowTxt("PS/2 Mouse, ", ((font_width + 1) * 31), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
     
-    while(!kb_detectPress('a'));
+    sleep(30);
 
     stage3_boot();
 

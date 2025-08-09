@@ -15,6 +15,7 @@
         "timer.h": "c",
         "array": "c",
         "string_view": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "mouse.h": "c"
     }
 }
