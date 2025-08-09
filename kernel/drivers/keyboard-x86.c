@@ -65,10 +65,34 @@ bool kb_keyPresses[128];
 extern void crash(const char* str);
 
 void keyboardHandler(struct InterruptRegisters *regs){
-    char scanCode = inb(0x60) & 0x7F; // key
-    char press = inb(0x60) & 0x80; // released or pressed?
-    crash("Keyboard handler triggered");
+    uint8_t kb_byte = inb(0x60);
+    uint8_t scanCode = kb_byte & 0x7F; // key
+    bool press = kb_byte & 0x80; // released or pressed?
+    
+    switch(scanCode){
+        case 42:
+            if (press == 0){
+                kb_capsOn = true;
+            }else{
+                kb_capsOn = false;
+            }
+        break;
+        case 58:
+        if (!kb_capsLock && press == 0){
+            kb_capsLock = true;
+        }else if (kb_capsLock && press == 0){
+            kb_capsLock = false;
+        }
 
+        break;
+        default:
+        if (!press){
+            kb_keyPresses[scanCode] = true;
+        } else {
+            kb_keyPresses[scanCode] = false;
+        }
+        break;
+    }
     // TODO: actually do something
 }
 
@@ -80,6 +104,10 @@ void KB_Init(){
     // disable caps, shift
     kb_capsOn = false;
     kb_capsLock = false;
+
+    while ((inb(0x64) & (1 << 0)) != 0){
+        inb(0x60);
+    }
 
     IRQ_setHandler(1, &keyboardHandler);
 }
