@@ -16,9 +16,9 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <stdint.h>
+#include <stdbool.h>
 
-void init_GDT();
-void init_IDT();
-void PIT_Init();
-void KB_Init();
-void Mouse_Init();
+void Mouse_Init(){
+    
+}

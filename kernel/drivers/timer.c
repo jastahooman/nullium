@@ -21,7 +21,7 @@
 #include <drivers/timer.h>
 #include <stdint.h>
 #include <utils/utils-x86.h>
-
+#include <drivers/graphics.h>
 uint64_t curr_ticks;
 
 
@@ -30,6 +30,6 @@ void Timer_Sleep(unsigned int time){
     curr_ticks = ticks;
     
     while(ticks - curr_ticks < time){
-        io_wait();
+         shadowTxt(" ", 0 ,0, 0, 0);
     }
 }

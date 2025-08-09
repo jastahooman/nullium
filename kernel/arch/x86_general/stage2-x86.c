@@ -29,6 +29,9 @@
 #include <drivers/graphics.h>
 #include "krnlBitmaps.h"
 #include <stdio.h>
+#include <drivers/keyboard.h>
+#include <utils/utils-x86.h>
+
 uint64_t gfx_resX;
 uint64_t gfx_resY;
 uint64_t gfx_bpp;
@@ -70,7 +73,6 @@ void crash(const char* str){
 
 void stage2_boot(void){
 
-    gfx_plotPixel(3, 3, 0xAAAAAA);
     //gfx_putRect(0, 0, gfx_resX, gfx_resY, 0x5500AA);
     gfx_putRect(0, 0, gfx_resX, gfx_resY, 0x0055AA);
 
@@ -89,17 +91,26 @@ void stage2_boot(void){
     shadowTxt("Loaded Elements:", ((font_height + 4) * 1) - 3, gfx_resY - ((font_height + 4) * 3) - 3, 0xFFFF00, 0x000000);
     
     init_GDT();
-    shadowTxt("GDT|", ((font_width + 1) * 1), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
+    shadowTxt("GDT, ", ((font_width + 1) * 1), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
+    
     putstr("GDT init ... OK :^P", 2, 2, 0x2255CC); // shhhhh :^)
     
     init_IDT();
-    shadowTxt("IDT|", ((font_width + 1) * 1), gfx_resY - ((font_height + 4) * 1) - 3, 0xFFFFFF, 0x000000);
+    shadowTxt("IDT, ", ((font_width + 1) * 6), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
     
     
-    // TO BE ADDED:
     PIT_Init();
-    sleep(40);
-    shadowTxt("PIT|", ((font_width + 1) * 5), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
+
+    sleep(10);
+    shadowTxt("PIT, ", ((font_width + 1) * 11), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
+
+    sleep(300);
+    KB_Init();
+    shadowTxt("PS/2 Keyboard, ", ((font_width + 1) * 16), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
+    
+
+    
+    shadowTxt("PS/2 Mouse, ", ((font_width + 1) * 31), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
     
 
     for(;;);

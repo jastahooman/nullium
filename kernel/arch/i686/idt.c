@@ -46,21 +46,31 @@ void IDT_SetGate(uint8_t num, uint32_t base, uint16_t sel, uint8_t flags){
 #define PIC1_DATA 0x21
 #define PIC2_DATA 0xA1
 
+#define PIC_INIT 0x11
+#define PIC1_BASE 0x20
+#define PIC2_BASE 0x28
+
+#define PIC2_IRQ 0x04
+#define PIC1_IRQ 0x02
+
+#define PIC_8086 0x01
+#define PIC_UNMASK 0
+
 void init_PIC(){
-    outb(PIC1_CMD, 0x11);
-    outb(PIC2_CMD, 0x11); 
+    outb(PIC1_CMD, PIC_INIT);
+    outb(PIC2_CMD, PIC_INIT); 
 
-    outb(PIC1_DATA, 0x20);
-    outb(PIC2_DATA, 0x28);
+    outb(PIC1_DATA, PIC1_BASE);
+    outb(PIC2_DATA, PIC2_BASE);
 
-    outb(PIC1_DATA, 0x04);
-    outb(PIC2_DATA, 0x02);
+    outb(PIC1_DATA, PIC2_IRQ);
+    outb(PIC2_DATA, PIC1_IRQ);
 
-    outb(PIC1_DATA, 0x01); 
-    outb(PIC2_DATA, 0x01);
+    outb(PIC1_DATA, PIC_8086); 
+    outb(PIC2_DATA, PIC_8086);
 
-    outb(PIC1_DATA, 0x0);
-    outb(PIC2_DATA, 0x0);
+    outb(PIC1_DATA, PIC_UNMASK);
+    outb(PIC2_DATA, PIC_UNMASK);
 }
 
 void init_IDT(){
@@ -184,19 +194,23 @@ void IRQ_setHandler (int irq, void (*handler)(struct InterruptRegisters *r)){
 void IRQ_rmHandler(int irq){
     irq_routines[irq] = 0;
 }
-
 void IRQ_Handler(struct InterruptRegisters* regs){
     void (*handler)(struct InterruptRegisters *regs);
 
     handler = irq_routines[regs->int_no - 32];
+    
 
     if (handler){
         handler(regs);
     }
 
-    if (regs->int_no >= 40){
+    
+
+    if (regs->int_no >= 8 + 32){
         outb(0xA0, 0x20);
     }
 
     outb(0x20,0x20);
+
+
 }
