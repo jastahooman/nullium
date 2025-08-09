@@ -17,7 +17,7 @@
 */
 #include <utils/utils.h>
 #include <krnlBitmaps.h>
-#include <drivers/lv1io.h>
+#include <drivers/graphics.h>
 
 void gfx_wireRect(uint64_t px, uint64_t py, uint64_t width, uint64_t height, uint32_t color){
     uint64_t x = px;

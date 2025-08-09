@@ -19,3 +19,4 @@
 
 void init_GDT();
 void init_IDT();
+void PIT_Init();

@@ -20,6 +20,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+
+void gfx_plotPixel(uint64_t x, uint64_t y, uint32_t color);
+uint32_t gfx_getPixel(uint64_t x, uint64_t y);
+
 void putltr(uint64_t px, uint64_t py, uint32_t color, int letter);
 
 void putRect(uint64_t px, uint64_t py, uint32_t color);

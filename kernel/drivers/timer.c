@@ -16,12 +16,20 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+// Timer Utilities
+
+#include <drivers/timer.h>
 #include <stdint.h>
-#include <stddef.h>
-#include <stdbool.h>
+#include <utils/utils-x86.h>
+
+uint64_t curr_ticks;
 
 
-extern const char* bootLdrName;
-extern const char* CPUArch;
-
-extern struct gfx_mode gfx_buffer_instance;
+void Timer_Sleep(unsigned int time){
+    
+    curr_ticks = ticks;
+    
+    while(ticks - curr_ticks < time){
+        io_wait();
+    }
+}

@@ -16,12 +16,11 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <stdio.h>
 #include <stdint.h>
-#include <stddef.h>
-#include <stdbool.h>
 
+#include <drivers/timer.h>
 
-extern const char* bootLdrName;
-extern const char* CPUArch;
-
-extern struct gfx_mode gfx_buffer_instance;
+void sleep(unsigned int time){
+    Timer_Sleep(time);
+}

@@ -9,7 +9,7 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULARIDT_Entry PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
@@ -26,8 +26,8 @@
 
 
 
-struct idt_entry_struct idt_entries[256];
-struct idt_ptr_struct idt_ptr;
+struct IDT_Entry idt_entries[256];
+struct IDT_Pointer idt_ptr;
 
 extern void IDT_set(uint32_t);
 void IDT_SetGate(uint8_t num, uint32_t base, uint16_t sel, uint8_t flags){
@@ -64,10 +64,10 @@ void init_PIC(){
 }
 
 void init_IDT(){
-    idt_ptr.limit = sizeof(struct idt_entry_struct) * 256 - 1;
+    idt_ptr.limit = sizeof(struct IDT_Entry) * 256 - 1;
     idt_ptr.base = (uint32_t) &idt_entries;
 
-    memset(&idt_entries, 0, sizeof(struct idt_entry_struct) * 256);
+    memset(&idt_entries, 0, sizeof(struct IDT_Entry) * 256);
 
     init_PIC();
 
@@ -181,7 +181,7 @@ void IRQ_setHandler (int irq, void (*handler)(struct InterruptRegisters *r)){
     irq_routines[irq] = handler;
 }
 
-void IRQ_RmHandler(int irq){
+void IRQ_rmHandler(int irq){
     irq_routines[irq] = 0;
 }
 

@@ -28,7 +28,7 @@
 #include "lv1io.h"
 #include <drivers/graphics.h>
 #include "krnlBitmaps.h"
-
+#include <stdio.h>
 uint64_t gfx_resX;
 uint64_t gfx_resY;
 uint64_t gfx_bpp;
@@ -88,16 +88,19 @@ void stage2_boot(void){
     
     shadowTxt("Loaded Elements:", ((font_height + 4) * 1) - 3, gfx_resY - ((font_height + 4) * 3) - 3, 0xFFFF00, 0x000000);
     
-
+    init_GDT();
     shadowTxt("GDT|", ((font_width + 1) * 1), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
     putstr("GDT init ... OK :^P", 2, 2, 0x2255CC); // shhhhh :^)
-    init_GDT();
-
-    shadowTxt("IDT|", ((font_width + 1) * 1), gfx_resY - ((font_height + 4) * 1) - 3, 0xFFFFFF, 0x000000);
+    
     init_IDT();
+    shadowTxt("IDT|", ((font_width + 1) * 1), gfx_resY - ((font_height + 4) * 1) - 3, 0xFFFFFF, 0x000000);
+    
     
     // TO BE ADDED:
-    //shadowTxt("PIC Timer", ((font_width + 1) * 5), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
+    PIT_Init();
+    sleep(40);
+    shadowTxt("PIT|", ((font_width + 1) * 5), gfx_resY - ((font_height + 4) * 2) - 3, 0xFFFFFF, 0x000000);
+    
 
     for(;;);
 

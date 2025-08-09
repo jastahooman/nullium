@@ -71,6 +71,9 @@ bin-i686:
 	$(GCC) -c $(KERNEL)utils/utils.c -o $(OUT)$(KERNEL)utils.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
 	$(GCC) -c $(KERNEL)stage3/winmgr.c -o $(OUT)$(KERNEL)winmgr.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
 	
+	$(GCC) -c $(KERNEL)stage3/stdio.c -o $(OUT)$(KERNEL)stdio.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
+	
+	$(GCC) -c $(KERNEL)drivers/timer.c -o $(OUT)$(KERNEL)timer.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
 	
 
 	# Architecture specific:
@@ -85,6 +88,8 @@ bin-i686:
 	$(GCC) -c $(KERNEL)arch/i686/idt.c -o $(OUT)$(KERNEL)idt.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
 	$(NASM) -felf32 $(KERNEL)arch/i686/idt.s -o $(OUT)$(KERNEL)idtASM.o
 
+	$(GCC) -c $(KERNEL)drivers/timer-x86.c -o $(OUT)$(KERNEL)timer86.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
+	
 	
 		
 
@@ -108,6 +113,10 @@ mboot2-bin:
 		$(OUT)$(KERNEL)winmgr.o\
 		$(OUT)$(KERNEL)idtASM.o\
 		$(OUT)$(KERNEL)idt.o\
+		$(OUT)$(KERNEL)timer86.o\
+		$(OUT)$(KERNEL)stdio.o\
+		$(OUT)$(KERNEL)timer.o\
+
 
 	 -lgcc -fPIC
 

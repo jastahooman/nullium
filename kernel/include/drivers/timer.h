@@ -16,12 +16,13 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <stdint.h>
-#include <stddef.h>
 #include <stdbool.h>
+#include <stdint.h>
+
+void Timer_Reset(void);
+void Timer_Sleep(unsigned int time);
 
 
-extern const char* bootLdrName;
-extern const char* CPUArch;
 
-extern struct gfx_mode gfx_buffer_instance;
+extern uint64_t ticks;
+extern uint64_t ticks_NoReset;

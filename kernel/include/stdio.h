@@ -17,11 +17,5 @@
 */
 
 #include <stdint.h>
-#include <stddef.h>
-#include <stdbool.h>
 
-
-extern const char* bootLdrName;
-extern const char* CPUArch;
-
-extern struct gfx_mode gfx_buffer_instance;
+void sleep(unsigned int time);

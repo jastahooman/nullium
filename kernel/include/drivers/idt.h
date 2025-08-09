@@ -16,12 +16,18 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
 
+struct InterruptRegisters{
+    uint32_t cr2;
+    uint32_t ds;
+    uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
+    uint32_t int_no, err_code;
+    uint32_t eip, csm, eflags, useresp, ss;
+};
 
-extern const char* bootLdrName;
-extern const char* CPUArch;
-
-extern struct gfx_mode gfx_buffer_instance;
+void IRQ_setHandler(int irq, void (*handler)(struct InterruptRegisters *r));
+void IRQ_rmHandler(int irq);

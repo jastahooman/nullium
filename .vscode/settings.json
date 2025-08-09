@@ -11,6 +11,9 @@
         "lv2io.h": "c",
         "krnlbitmaps.h": "c",
         "winmgr.h": "c",
-        "idt.h": "c"
+        "idt.h": "c",
+        "timer.h": "c",
+        "array": "c",
+        "string_view": "c"
     }
 }
