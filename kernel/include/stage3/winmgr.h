@@ -20,3 +20,4 @@
 #include <stdbool.h>
 
 extern void drawMenuBar();
+void drawMenuIcn(bool inverted);

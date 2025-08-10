@@ -18,13 +18,15 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <utils/utils.h>
+#include <utils/utils-x86.h>
 #include "multiboot2.h"
 const char* bootLdrName;
 const char* CPUArch;
 
-extern uint64_t gfx_resX;
-extern uint64_t gfx_resY;
-extern uint64_t gfx_bpp;
+extern long gfx_resX;
+extern long gfx_resY;
+extern long gfx_bpp;
 
 
 struct fb_struct{
@@ -41,7 +43,15 @@ struct fb_struct fb_Info;
 
 extern void stage2_boot(void);
 
-uint32_t gfx_getPixel(uint64_t x, uint64_t y){
+#define SCREEN_RESX 1024
+#define SCREEN_RESY 768
+
+uint32_t screen_buffer[SCREEN_RESX * SCREEN_RESY];
+
+
+// direct framebuffer commands
+
+uint32_t gfx_getPixelD(uint64_t x, uint64_t y){
   if (!(x > fb_Info.width || y > fb_Info.height)){
         volatile uint32_t *fb_ptr = fb_Info.addr;
         uint32_t color = fb_ptr[y * (fb_Info.pitch / 4) + x];
@@ -50,13 +60,32 @@ uint32_t gfx_getPixel(uint64_t x, uint64_t y){
   return 0;
 }
 
-void gfx_plotPixel(uint64_t x, uint64_t y, uint32_t color){
+void gfx_plotPixelD(uint64_t x, uint64_t y, uint32_t color){
     if (!(x > fb_Info.width || y > fb_Info.height)){
         volatile uint32_t *fb_ptr = fb_Info.addr;
         fb_ptr[y * (fb_Info.pitch / 4) + x] = color;
     }
+}
+
+// buffer 2 commands
+
+uint32_t gfx_getPixel(uint64_t x, uint64_t y){
+  if (!(x > fb_Info.width || y > fb_Info.height)){
+        return screen_buffer[gfx_resX * y + x];
+  }
+  return 0;
+}
+
+void gfx_plotPixel(uint64_t x, uint64_t y, uint32_t color){
+    if (!(x > fb_Info.width || y > fb_Info.height)){
+      screen_buffer[gfx_resX * y + x] = color;
+      gfx_plotPixelD(x, y, color);
+    }
     
 }
+
+
+
 
 void stage1_boot (unsigned long magic, unsigned long addr){  
     struct multiboot_tag *tag;

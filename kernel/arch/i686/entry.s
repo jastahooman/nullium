@@ -69,8 +69,8 @@ FB_Tag:
     DW 1
     DD 20
 
-    DD 640
-    DD 480
+    DD 1024
+    DD 768
     DD 32
 FB_TagEnd:
 

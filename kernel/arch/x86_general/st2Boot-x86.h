@@ -20,5 +20,4 @@
 void init_GDT();
 void init_IDT();
 void PIT_Init();
-void KB_Init();
-void Mouse_Init();
+void PS2_Init();

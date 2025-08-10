@@ -23,26 +23,36 @@
 #include <drivers/lv2io.h>
 #include <krnlBitmaps.h>
 
-
-void drawMenuBar(){
-    gfx_putRect(0, 0, gfx_resX, 19, 0x000000);
-    gfx_putRect(0, 0, gfx_resX, 17, 0xFFFFFF);
-
-    unsigned int idx = 0;
+void drawMenuIcn(bool inverted){
     // Nullium logo
+    unsigned int idx = 0;
     for(unsigned int y = 0; y < 12; y++){
 
         for(unsigned int x = 0; x < 12; x++){
 
             
-                
-            if (menuBtn[idx] == 1){
-                gfx_plotPixel(x + 2, y + 2, 0x000000);
-
+            if (inverted){
+                if (menuBtn[idx] == 1){
+                    gfx_plotPixel(x + 2, y + 2, 0xFFFFFF);
+                } else {
+                    gfx_plotPixel(x + 2, y + 2, 0x000000);
+                }
+            } else {
+                if (menuBtn[idx] == 1){
+                    gfx_plotPixel(x + 2, y + 2, 0x000000);
+                } else {
+                    gfx_plotPixel(x + 2, y + 2, 0xFFFFFF);
+                }
             }
             idx++;
         }
     }
+}
 
+void drawMenuBar(){
+    gfx_putRect(0, 0, gfx_resX, 19, 0x000000);
+    gfx_putRect(0, 0, gfx_resX, 17, 0xFFFFFF);
+
+    drawMenuIcn(false);
 
 }

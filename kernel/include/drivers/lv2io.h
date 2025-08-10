@@ -20,6 +20,6 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-extern uint64_t gfx_resX;
-extern uint64_t gfx_resY;
-extern uint64_t gfx_bpp;
+extern long gfx_resX;
+extern long gfx_resY;
+extern long gfx_bpp;

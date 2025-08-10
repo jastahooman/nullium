@@ -75,8 +75,7 @@ bin-i686:
 	
 	$(GCC) -c $(KERNEL)drivers/timer.c -o $(OUT)$(KERNEL)timer.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
 	
-	$(GCC) -c $(KERNEL)drivers/keyboard-x86.c -o $(OUT)$(KERNEL)keyboard.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
-	
+
 
 
 	# Architecture specific:
@@ -93,16 +92,17 @@ bin-i686:
 
 	$(GCC) -c $(KERNEL)drivers/timer-x86.c -o $(OUT)$(KERNEL)timer86.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
 	
-	$(GCC) -c $(KERNEL)drivers/mouse-x86.c -o $(OUT)$(KERNEL)mouse86.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
 	$(GCC) -c $(KERNEL)stage3/stage3.c -o $(OUT)$(KERNEL)stage3.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
+	
+	$(GCC) -c $(KERNEL)drivers/PS2-x86.c -o $(OUT)$(KERNEL)PS2-x86.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
 	
 		
 
 
 mboot2-bin:
 	
-	$(NASM) -felf32 $(KERNEL)arch/i686/entry.s -o $(OUT)$(KERNEL)entry.o
-	$(GCC) -c $(KERNEL)arch/i686/stage1.c -o $(OUT)$(KERNEL)stage1.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC
+	$(NASM) -felf32 $(KERNEL)arch/i686/entry.s -o $(OUT)$(KERNEL)entry.o 
+	$(GCC) -c $(KERNEL)arch/i686/stage1.c -o $(OUT)$(KERNEL)stage1.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
 	
 
 	$(GCC) -T $(KERNEL)arch/i686/linker.ld -o $(OUT)nullium.bin -ffreestanding -O2 -nostdlib\
@@ -121,8 +121,7 @@ mboot2-bin:
 		$(OUT)$(KERNEL)timer86.o\
 		$(OUT)$(KERNEL)stdio.o\
 		$(OUT)$(KERNEL)timer.o\
-		$(OUT)$(KERNEL)keyboard.o\
-		$(OUT)$(KERNEL)mouse86.o\
+		$(OUT)$(KERNEL)PS2-x86.o\
 		$(OUT)$(KERNEL)stage3.o\
 	 -lgcc -fPIC
 

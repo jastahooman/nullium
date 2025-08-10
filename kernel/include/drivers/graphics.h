@@ -21,8 +21,13 @@
 #include <stdbool.h>
 
 
-void gfx_plotPixel(uint64_t x, uint64_t y, uint32_t color);
+void gfx_plotPixelD(uint64_t x, uint64_t y, uint32_t color);
+uint32_t gfx_getPixelD(uint64_t x, uint64_t y);
+
 uint32_t gfx_getPixel(uint64_t x, uint64_t y);
+void gfx_plotPixel(uint64_t x, uint64_t y, uint32_t color);
+
+void gfx_copyBuffer();
 
 void putltr(uint64_t px, uint64_t py, uint32_t color, int letter);
 
@@ -35,3 +40,5 @@ void gfx_putRect(uint64_t px, uint64_t py, uint64_t width, uint64_t height, uint
 void drawCurs(uint64_t posx, uint64_t posy, uint8_t cursor);
 
 void shadowTxt(const char* str, uint64_t px, uint64_t py, uint32_t color, uint32_t shadowClr);
+
+void bufferRct(uint64_t px, uint64_t py, uint64_t width, uint64_t height);

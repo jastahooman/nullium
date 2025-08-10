@@ -1,3 +1,21 @@
+/*
+    The Nullium Operating System
+    Copyright (C) 2025, jastahooman
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 #include <stdbool.h>
 #include <stdint.h>
 #include "drivers/keyboard.h"
@@ -102,14 +120,97 @@ void keyboardHandler(struct InterruptRegisters *regs){
         }
         break;
     }
-    // TODO: actually do something
 }
 
 bool AUX_available = false;
 
+uint8_t mouse_cycle=0;     //unsigned char
+
+char mouse_byte[3];    //signed char
+char mouse_x=0;         //signed char
+char mouse_y=0;         //signed char
 
 
-void KB_Init(){
+
+
+inline void mouse_wait(uint8_t a_type) //unsigned char
+{
+  uint32_t time_out=100000; //unsigned int
+  if(a_type==0)
+  {
+    while(time_out--) //Data
+    {
+      if((inb(0x64) & 1)==1)
+      {
+        return;
+      }
+    }
+    return;
+  }
+  else
+  {
+    while(time_out--) //Signal
+    {
+      if((inb(0x64) & 2)==0)
+      {
+        return;
+      }
+    }
+    return;
+  }
+}
+bool mouse_newIO = false;
+
+void mouse_acknowledge(){
+    mouse_newIO = false;
+}
+
+void mouse_handler(struct InterruptRegisters *regs){
+    
+
+    switch(mouse_cycle)
+    {
+    case 0:
+        mouse_byte[0]=inb(0x60);
+        mouse_cycle++;
+        break;
+    case 1:
+        mouse_byte[1]=inb(0x60);
+        mouse_cycle++;
+        break;
+    case 2:
+        mouse_byte[2]=inb(0x60);
+        mouse_x=mouse_byte[1];
+        mouse_y=mouse_byte[2];
+        mouse_cycle=0;
+        mouse_newIO = true;
+        break;
+    }
+}
+
+inline void mouse_write(uint8_t a_write)
+{
+  //Wait to be able to send a command
+  mouse_wait(1);
+  //Tell the mouse we are sending a command
+  outb(0x64, 0xD4);
+  //Wait for the final part
+  mouse_wait(1);
+  //Finally write
+  outb(0x60, a_write);
+}
+
+uint8_t mouse_read()
+{
+  //Get's response from mouse
+  mouse_wait(0); 
+  return inb(0x60);
+}
+
+void PS2_Init(){
+
+    // Keyboard
+
     // disable caps, shift
     kb_capsOn = false;
     kb_capsLock = false;
@@ -119,4 +220,34 @@ void KB_Init(){
     }
 
     IRQ_setHandler(1, &keyboardHandler);
+
+    // Mouse:
+
+    uint8_t status;  //unsigned char
+
+    //Enable the auxiliary mouse device
+    mouse_wait(1);
+    outb(0x64, 0xA8);
+
+    //Enable the interrupts
+    mouse_wait(1);
+    outb(0x64, 0x20);
+    mouse_wait(0);
+    status=(inb(0x60) | 2);
+    mouse_wait(1);
+    outb(0x64, 0x60);
+    mouse_wait(1);
+    outb(0x60, status);
+
+    //Tell the mouse to use default settings
+    mouse_write(0xF6);
+    mouse_read();  //Acknowledge
+
+    //Enable the mouse
+    mouse_write(0xF4);
+    mouse_read();  //Acknowledge
+
+    //Setup the mouse handler
+    IRQ_setHandler(12, &mouse_handler);
+
 }

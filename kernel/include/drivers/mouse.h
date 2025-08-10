@@ -16,3 +16,9 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+extern char mouse_byte[3];
+extern char mouse_x;
+extern char mouse_y;
+
+extern bool mouse_newIO;
+extern void mouse_acknowledge();

@@ -51,6 +51,15 @@ void gfx_putRect(uint64_t px, uint64_t py, uint64_t width, uint64_t height, uint
 }
 
 
+void bufferRct(uint64_t px, uint64_t py, uint64_t width, uint64_t height){
+    uint64_t x = px;
+    uint64_t y = py;
+    for(y = py; y < height + py; y++){
+        for(x = px; x < width + px; x++){
+            gfx_plotPixelD(x, y, gfx_getPixel(x, y));
+        }
+    }
+}
 
 void drawCurs(uint64_t px, uint64_t py, uint8_t cursor){
     unsigned int idx = 0;
@@ -62,10 +71,10 @@ void drawCurs(uint64_t px, uint64_t py, uint8_t cursor){
             
                 
             if (cursors[cursor][idx] == 1){
-                gfx_plotPixel(x + px, y + py, 0xFFFFFF);
+                gfx_plotPixelD(x + px, y + py, 0xFFFFFF);
 
             } else if (cursors[cursor][idx] == 2){
-                gfx_plotPixel(x + px, y + py, 0x000000);
+                gfx_plotPixelD(x + px, y + py, 0x000000);
             }
             idx++;
         }
