@@ -22,3 +22,5 @@ extern char mouse_y;
 
 extern bool mouse_newIO;
 extern void mouse_acknowledge();
+
+extern bool mouse_btnPressed[3];

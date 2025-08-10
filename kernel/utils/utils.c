@@ -20,6 +20,10 @@
 #include <stddef.h>
 #include <stdbool.h>
 
+uint8_t getBit(uint8_t num, uint8_t bitpos){
+    return ((num & (1 << (bitpos-1)) ? 1 : 0));
+}
+
 unsigned int getstrsz(const char* str){
     unsigned int idx = 0;
     while(str[idx]){

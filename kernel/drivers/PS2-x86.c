@@ -20,6 +20,7 @@
 #include <stdint.h>
 #include "drivers/keyboard.h"
 #include <utils/utils-x86.h>
+#include <utils/utils.h>
 #include <drivers/idt.h>
 
 #include <stdio.h>
@@ -165,8 +166,9 @@ void mouse_acknowledge(){
     mouse_newIO = false;
 }
 
+bool mouse_btnPressed[3];
+
 void mouse_handler(struct InterruptRegisters *regs){
-    
 
     switch(mouse_cycle)
     {
@@ -184,6 +186,11 @@ void mouse_handler(struct InterruptRegisters *regs){
         mouse_y=mouse_byte[2];
         mouse_cycle=0;
         mouse_newIO = true;
+
+        mouse_btnPressed[0] = getBit(mouse_byte[0], 1);
+        mouse_btnPressed[1] = getBit(mouse_byte[0], 0);
+        mouse_btnPressed[2] = getBit(mouse_byte[0], 2);
+        
         break;
     }
 }

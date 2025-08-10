@@ -76,11 +76,20 @@ void stage2_boot(void){
     //gfx_putRect(0, 0, gfx_resX, gfx_resY, 0x5500AA);
     gfx_putRect(0, 0, gfx_resX, gfx_resY, 0x0055AA);
 
+    unsigned int idx = 0;
+    for(unsigned int y = 0; y < 12; y++){
+
+        for(unsigned int x = 0; x < 12; x++){
+            if (menuBtn[idx] == 1){
+                gfx_plotPixel(x + (gfx_resX/2) - 12 , y + (gfx_resY/2) - 12, 0x000000);
+            }
+            idx++;
+        }
+    }
 
 
     init_GDT();
 
-    putstr("GDT init ... OK :^P", 2, 2, 0x2255CC); // shhhhh :^)
     
     init_IDT();
 
@@ -95,7 +104,7 @@ void stage2_boot(void){
 
     sleep(30);
 
-    unsigned int idx = 0;
+    idx = 0;
     for(unsigned int y = 0; y < 12; y++){
 
         for(unsigned int x = 0; x < 12; x++){
@@ -107,7 +116,7 @@ void stage2_boot(void){
     }
 
 
-    sleep(70);
+    sleep(50);
 
     stage3_boot();
 

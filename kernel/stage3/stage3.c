@@ -7,6 +7,7 @@
 #include <drivers/mouse.h>
 #include <krnlBitmaps.h>
 #include <drivers/keyboard.h>
+#include <utils/utils.h>
 
 long cursor_posX = 255;
 long cursor_posY = 255;
@@ -61,6 +62,7 @@ void mouse_update(){
         }
         mouse_acknowledge();
 
+        
 
         out_cursor();
 
@@ -130,16 +132,6 @@ int stage3_boot(){
     gfx_putRect(0, 0, gfx_resX, gfx_resY, 0x0055AA);
     drawMenuBar();
     cursor = 0;
-
-    
-    for(;;){
-        if (mouse_byte[0]){
-            drawMenuIcn(true);
-        } else {
-            drawMenuIcn(false);
-        }
-        sleep(2);
-    }
 
 
     return 0;

@@ -26,6 +26,11 @@
 void drawMenuIcn(bool inverted){
     // Nullium logo
     unsigned int idx = 0;
+    if (inverted){
+        gfx_putRect(0, 0, 16, 17, 0x000000);
+    } else {
+        gfx_putRect(0, 0, 16, 17, 0xFFFFFF);
+    }
     for(unsigned int y = 0; y < 12; y++){
 
         for(unsigned int x = 0; x < 12; x++){
