@@ -20,9 +20,11 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-
-extern const char* CPUBits;
+extern const char* BootProtocol;
+extern const char* PCtype;
+extern const char* PCfirmware;
 extern const char* CPUArch;
+
 
 extern struct gfx_mode gfx_buffer_instance;
 

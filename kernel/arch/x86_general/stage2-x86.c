@@ -52,17 +52,24 @@ void crash(const char* str){
     
     gfx_putRect(gfx_resX / 4 - 1, gfx_resY / 4 - 1, gfx_resX / 2 + 2, gfx_resY / 2 + 2 , 0x000000);
     gfx_putRect(gfx_resX / 4, gfx_resY / 4, gfx_resX / 2, gfx_resY / 2 , 0xCCCCCC);
+    
+    
+
     putstr("Panic!", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5, 0x000000);
-    putstr("Bootloader used: ", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5 + ((font_height + 4) * 1), 0x000000);
-    putstr(bootLdrName, (gfx_resX / 4) + 5 + ((font_width + 1) * 17), (gfx_resY / 4) + 5 + ((font_height + 4) * 1), 0x000000);
-    putstr("CPU Architecture: ", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5 + ((font_height + 4) * 2), 0x000000);
-    putstr(CPUArch, (gfx_resX / 4) + 5 + ((font_width + 1) * 18), (gfx_resY / 4) + 5 + ((font_height + 4) * 2), 0x000000);
+    putstr("System architecture: ", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5 + ((font_height + 5) * 1), 0x000000);
+    putstr(PCtype, (gfx_resX / 4) + 5 + ((font_width + 1) * 0), (gfx_resY / 4) + 5 + ((font_height + 5) * 2), 0x000000);
+    putstr(CPUArch, (gfx_resX / 4) + 5 + ((font_width + 1) * 0), (gfx_resY / 4) + 5 + ((font_height + 5) * 3), 0x000000);
 
-    putstr("Operating System version:", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5 + ((font_height + 4) * 4), 0x000000);
-    putstr("    Nullium\n    version 1.0 Update 0", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5 + ((font_height + 4) * 5), 0x000000);
+    putstr("OS version:\n    Nullium\n    version 1.0 Update 0", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5 + ((font_height + 5) * 5), 0x000000);
+    
 
-    putstr("Crash Reason: ", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5 + ((font_height + 4) * 9), 0x000000);
-    putstr(str, (gfx_resX / 4) + 5 + ((font_width + 1) * 0), (gfx_resY / 4) + 5 + ((font_height + 4) * 10), 0x000000);
+    putstr("Crash Reason: ", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5 + ((font_height + 5) * 9), 0x000000);
+    putstr(str, (gfx_resX / 4) + 5 + ((font_width + 1) * 0), (gfx_resY / 4) + 5 + ((font_height + 5) * 10), 0x000000);
+
+    putstr("Visit OS Git Repo with this link:\nhttps://github.com/jastahooman/nullium", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5 + ((font_height + 5) * 12), 0x000000);
+    
+
+    
 
     for (;;) {
         asm ("hlt");
@@ -87,6 +94,7 @@ void stage2_boot(void){
         }
     }
 
+    crash("Test");
 
     init_GDT();
 

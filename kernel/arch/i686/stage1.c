@@ -167,12 +167,7 @@ void stage1_boot (unsigned long magic, unsigned long addr){
     gfx_bpp  = fb_Info.depth;
 
     // power pc port planned
-    /*
-    BootProtocol = "GNU Multiboot2";
-    PCfirmware = "IEEE-1275 'Open Firmware'";
-    CPUArch = "IBM PowerPC 750 or newer";
-    PCtype = "New World ROM Apple Macintosh or compatible";
-    */
+
     BootProtocol = "GNU Multiboot2";
     PCtype = "IBM PC or compatible";
     PCfirmware = "BIOS";
