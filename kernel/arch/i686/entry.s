@@ -54,7 +54,7 @@ ENTRYADDR_Tag:
     DW 1
     DD (ADDR_TagEnd - ADDR_Tag)
 
-    DD OS_Start
+    DD OS_Prep
 ENDADDR_TagEnd:
 
 ; behold: the ultimate fuckshit implementation
@@ -79,6 +79,9 @@ MB_HeaderEnd:
 
 
 section .text
+
+OS_Prep:
+    jmp OS_Start
 
 OS_Start:
     mov esp, stack_top

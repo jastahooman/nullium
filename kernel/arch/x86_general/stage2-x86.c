@@ -94,7 +94,6 @@ void stage2_boot(void){
         }
     }
 
-    crash("Test");
 
     init_GDT();
 
