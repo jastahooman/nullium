@@ -26,7 +26,5 @@ extern const char* PCfirmware;
 extern const char* CPUArch;
 
 
-extern struct gfx_mode gfx_buffer_instance;
-
 void gfx_plotPixel(uint64_t x, uint64_t y, uint32_t color);
 uint32_t gfx_getPixel(uint64_t x, uint64_t y);

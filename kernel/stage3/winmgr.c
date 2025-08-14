@@ -24,30 +24,12 @@
 #include <krnlBitmaps.h>
 
 void drawMenuIcn(bool inverted){
-    // Nullium logo
     unsigned int idx = 0;
-    if (inverted){
-        gfx_putRect(0, 0, 16, 17, 0x000000);
-    } else {
-        gfx_putRect(0, 0, 16, 17, 0xFFFFFF);
-    }
     for(unsigned int y = 0; y < 12; y++){
 
         for(unsigned int x = 0; x < 12; x++){
-
-            
-            if (inverted){
-                if (menuBtn[idx] == 1){
-                    gfx_plotPixel(x + 2, y + 2, 0xFFFFFF);
-                } else {
-                    gfx_plotPixel(x + 2, y + 2, 0x000000);
-                }
-            } else {
-                if (menuBtn[idx] == 1){
-                    gfx_plotPixel(x + 2, y + 2, 0x000000);
-                } else {
-                    gfx_plotPixel(x + 2, y + 2, 0xFFFFFF);
-                }
+            if (menuBtn[idx] == 1){
+                gfx_plotPixel(x + 2, y + (gfx_resY - 2) - 12, 0x000000);
             }
             idx++;
         }
@@ -55,8 +37,8 @@ void drawMenuIcn(bool inverted){
 }
 
 void drawMenuBar(){
-    gfx_putRect(0, 0, gfx_resX, 19, 0x000000);
-    gfx_putRect(0, 0, gfx_resX, 17, 0xFFFFFF);
+    gfx_putRect(0, gfx_resY - 19, gfx_resX, 19, 0x000000);
+    gfx_putRect(0, gfx_resY - 17, gfx_resX, 17, 0xFFFFFF);
 
     drawMenuIcn(false);
 

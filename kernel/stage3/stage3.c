@@ -95,7 +95,7 @@ void s3_tick(void){
 
 //todo: make dynamic
 
-int stage3_boot(){
+int stage3_boot(struct os_bootParams bootConf){
 
     gfx_plotPixel(3, 3, 0xAAAAAA);
     //gfx_putRect(0, 0, gfx_resX, gfx_resY, 0x5500AA);
@@ -109,31 +109,35 @@ int stage3_boot(){
 
     putstr("Welcome to Nullium...", gfx_resX / 2 - 102, gfx_resY / 4 - 20, 0x000000);
     
-    drawMenuBar();
-
-    gfx_wireRect(gfx_resX / 2 - 200 + 10, gfx_resY / 4 + 25, 380, 15, 0x000000);
-    gfx_putRect(gfx_resX / 2 - 200 + 11, gfx_resY / 4 + 26, 378, 13, 0xDADAFF);
-    gfx_putRect(gfx_resX / 2 - 200 + 11, gfx_resY / 4 + 26, 5 * (378 / 100), 13, 0x444455);
-    
     Timer_Reset();
-    sleep(10);
-    gfx_putRect(gfx_resX / 2 - 200 + 11, gfx_resY / 4 + 26, 10 * (378 / 100), 13, 0x444455);
 
+
+    drawMenuBar();
     sensitivity = 2;
     cursor = 1;
+
+    if(bootConf.disableSysExt){
+        sleep(60);
+        
     
-    gfx_putRect(gfx_resX / 2 - 200 + 11, gfx_resY / 4 + 26, 15 * 2, 13, 0x444455);
+    } else {
+        gfx_putRect(gfx_resX / 2 - 200 + 11, gfx_resY / 4 + 26, 378, 13, 0x444455);
+        gfx_wireRect(gfx_resX / 2 - 200 + 10, gfx_resY / 4 + 25, 380, 15, 0x000000);
+        gfx_putRect(gfx_resX / 2 - 200 + 11, gfx_resY / 4 + 26, 378, 13, 0xDADAFF);
+        gfx_putRect(gfx_resX / 2 - 200 + 11, gfx_resY / 4 + 26, 5 * (378 / 100), 13, 0x444455);
+        
+        sleep(40);
+    }
 
-
-
-    gfx_putRect(gfx_resX / 2 - 200 + 11, gfx_resY / 4 + 26, 378, 13, 0x444455);
 
     sleep(100);
 
     gfx_putRect(0, 0, gfx_resX, gfx_resY, 0x0055AA);
     drawMenuBar();
+    
     cursor = 0;
 
+    for(;;);
 
     return 0;
 }

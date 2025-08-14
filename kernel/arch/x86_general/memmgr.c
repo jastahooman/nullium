@@ -1,5 +1,5 @@
 /*
-    Nullium Kernel Bitmaps
+    The Nullium Operating System
     Copyright (C) 2025, jastahooman
 
     This program is free software: you can redistribute it and/or modify
@@ -16,18 +16,6 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <stdbool.h>
+#include <drivers/ldata.h>
 #include <stdint.h>
-
-
-extern uint8_t font_width;
-extern uint8_t font_height;
-extern uint8_t cursor_width;
-extern uint8_t cursor_height;
-
-extern uint8_t cursors[1][165];
-extern bool font_regular[100][77];
-
-extern char fontMap[100];
-
-extern bool menuBtn[144];
+#include <stdbool.h>

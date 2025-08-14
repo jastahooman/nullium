@@ -45,11 +45,14 @@ SECTIONS
 	/* Read-write data (uninitialized) and stack */
 	.bss BLOCK(4K) : ALIGN(4K)
 	{
+		ld_sbss = .;
 		*(COMMON)
 		*(.bss)
+		ld_endbss = .;
+		ld_endkernel = .;
 	}
 
-    _end = .;
+	_end = .;
 
 	/* The compiler may produce other sections, by default it will put them in
 	   a segment with the same name. Simply add stuff here as needed. */

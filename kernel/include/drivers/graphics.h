@@ -31,6 +31,8 @@ void gfx_copyBuffer();
 
 void putltr(uint64_t px, uint64_t py, uint32_t color, int letter);
 
+void putltr_txtmode(uint64_t px, uint64_t py, uint32_t color, char letter);
+
 void putRect(uint64_t px, uint64_t py, uint32_t color);
 void gfx_wireRect(uint64_t px, uint64_t py, uint64_t width, uint64_t height, uint32_t color);
 

@@ -31,11 +31,13 @@
 #include <stdio.h>
 #include <drivers/keyboard.h>
 #include <utils/utils-x86.h>
+#include <drivers/lv2io.h>
 
 long gfx_resX;
 long gfx_resY;
 long gfx_bpp;
 
+struct os_bootParams bootParams;
 
 void crash(const char* str){
     
@@ -76,7 +78,7 @@ void crash(const char* str){
     }
 }
 
-extern int stage3_boot();
+extern int stage3_boot(struct os_bootParams bootConf);
 
 void stage2_boot(void){
 
@@ -94,6 +96,7 @@ void stage2_boot(void){
         }
     }
 
+    
 
     init_GDT();
 
@@ -122,10 +125,26 @@ void stage2_boot(void){
         }
     }
 
+    sleep(20);
 
-    sleep(50);
+    bootParams.disableSysExt = false;
+    bootParams.extCrashData = false;
+    uint32_t y = 5;
+    if (kb_detectPress('c')){
+        bootParams.extCrashData = true;
+        shadowTxt("Extended crash info.", 5, y, 0xFFFFFF, 0x000000);
+        y += font_height + 5;
+        sleep(3);
+    }
+    if (kb_detectPress('e')){
+        bootParams.disableSysExt = true;
+        shadowTxt("Extensions off...", 5, y, 0xFFFFFF, 0x000000);
+        y += font_height + 5;
+    }
 
-    stage3_boot();
+    sleep(60);
+
+    stage3_boot(bootParams);
 
 
     

@@ -16,15 +16,11 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+// These are access points defined in the linker.
+
 #include <stdint.h>
-#include <stddef.h>
 #include <stdbool.h>
 
-extern long gfx_resX;
-extern long gfx_resY;
-extern long gfx_bpp;
-
-struct os_bootParams{
-    bool disableSysExt;
-    bool extCrashData;
-};
+extern uint32_t ld_sbss;
+extern uint32_t ld_endbss;
+extern uint32_t ld_endkernel;

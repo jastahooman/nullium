@@ -32,7 +32,7 @@ extern long gfx_resY;
 extern long gfx_bpp;
 
 
-struct fb_struct{
+struct nm_boot_fb{
     uint16_t type;
     uint16_t flags;
     uint32_t pitch;
@@ -42,7 +42,7 @@ struct fb_struct{
     void * addr;
 };
 
-struct fb_struct fb_Info;
+struct nm_boot_fb fb_Info;
 
 extern void stage2_boot(void);
 
@@ -103,8 +103,12 @@ void stage1_boot (unsigned long magic, unsigned long addr){
        tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag 
                                        + ((tag->size + 7) & ~7)))
     {
-        switch (tag->type){
-        
+        switch (tag->type){ 
+        case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
+          {
+          struct multiboot_tag_basic_meminfo meminfo;
+          break;
+          }
         case MULTIBOOT_TAG_TYPE_FRAMEBUFFER:
           {
             multiboot_uint32_t color;

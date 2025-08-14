@@ -80,9 +80,37 @@ void drawCurs(uint64_t px, uint64_t py, uint8_t cursor){
         }
     }
 }
+void putltr_txtmode(uint64_t px, uint64_t py, uint32_t color, char letter){
+    if (letter == 34 || letter == 43 || letter == 44 || letter == 52){
+        py += 4;
+    }
+    if (letter == 37){
+        py += 1;
+    }
+    unsigned int ltr;
+    for(uint32_t searchidx = 0; searchidx < 100; searchidx++){
+                if (fontMap[searchidx] == letter){
+                    ltr = searchidx;
+                    break;
+                }
+    }
 
+    unsigned int idx = 0;
+    for(unsigned int y = 0; y < font_height; y++){
+
+        for(unsigned int x = 0; x < font_width; x++){
+
+            
+                
+            if (font_regular[ltr][idx]){
+                gfx_plotPixel(x + px, y + py, color);
+            }
+            idx++;
+        }
+    }
+}
 void putltr(uint64_t px, uint64_t py, uint32_t color, int letter){
-
+    
 
 
     if (letter == 34 || letter == 43 || letter == 44 || letter == 52){

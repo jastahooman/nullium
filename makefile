@@ -97,6 +97,7 @@ bin-i686:
 	$(GCC) -c $(KERNEL)drivers/PS2-x86.c -o $(OUT)$(KERNEL)PS2-x86.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
 	
 		
+	$(GCC) -c $(KERNEL)drivers/memory.c -o $(OUT)$(KERNEL)memory.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
 
 
 mboot2-bin:
