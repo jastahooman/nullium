@@ -10,6 +10,9 @@
 #include <utils/utils.h>
 
 
+#include <drivers/memmgr.h>
+#include <drivers/ldata.h>
+
 long cursor_posX = 255;
 long cursor_posY = 255;
 
@@ -94,6 +97,7 @@ void s3_tick(void){
 
 
 //todo: make dynamic
+extern void crash(const char* str);
 
 int stage3_boot(struct os_bootParams bootConf){
 
@@ -137,7 +141,29 @@ int stage3_boot(struct os_bootParams bootConf){
     
     cursor = 0;
 
-    for(;;);
+    char* str = "0xFFFFFFFFFFFF";
+    putstr(itoa(mem_Info.mem_total, str, 10), 0, 0, 0xFFFFFF);
+    putstr(itoa((int)&ld_start / 1000, str, 10), 0, 20, 0xFFFFFF);
+    putstr(itoa((int)&ld_end / 1000, str, 10), 0, 40, 0xFFFFFF);
+
+    putstr(itoa(((int)&ld_end - (int)&ld_start) / 1000, str, 10), 0, 60, 0xFFFFFF);
+    putstr(itoa(((int)&ld_end - (int)&ld_end_data) / 1000, str, 10), 0, 80, 0xFFFFFF);
+
+    putstr(itoa(((int)&ld_end_data - (int)&ld_start) / 1000, str, 16), 0, 100, 0xFFFFFF);
+
+
+
+    putstr(itoa((int)&ld_start, str, 10), 200, 20, 0xFFFFFF);
+    putstr(itoa((int)&ld_end, str, 10), 200, 40, 0xFFFFFF);
+
+    putstr(itoa(((int)&ld_end - (int)&ld_start), str, 10), 200, 60, 0xFFFFFF);
+    putstr(itoa(((int)&ld_end - (int)&ld_end_data), str, 10), 200, 80, 0xFFFFFF);
+
+    putstr(itoa(((int)&ld_end_data - (int)&ld_start), str, 10), 200, 100, 0xFFFFFF);
+
+
+    
+
 
     return 0;
 }

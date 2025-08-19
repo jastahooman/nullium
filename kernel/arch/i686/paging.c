@@ -19,3 +19,7 @@
 #include <drivers/ldata.h>
 #include <stdint.h>
 #include <stdbool.h>
+
+void init_paging(){
+    
+}

@@ -24,6 +24,8 @@ uint8_t getBit(uint8_t num, uint8_t bitpos){
     return ((num & (1 << (bitpos-1)) ? 1 : 0));
 }
 
+
+
 unsigned int getstrsz(const char* str){
     unsigned int idx = 0;
     while(str[idx]){
@@ -32,6 +34,47 @@ unsigned int getstrsz(const char* str){
     return idx;
 }
 
+
+char * itoa( int value, char * str, int base ){
+    char * rc;
+    char * ptr;
+    char * low;
+    // Check for supported base.
+    if ( base < 2 || base > 36 )
+    {
+        *str = '\0';
+        return str;
+    }
+    rc = ptr = str;
+    // Set '-' for negative decimals.
+    if ( value < 0 && base == 10 )
+    {
+        *ptr++ = '-';
+    }
+    // Remember where the numbers start.
+    low = ptr;
+    // The actual conversion.
+    do
+    {
+        // Modulo is negative for negative value. This trick makes abs() unnecessary.
+        *ptr++ = "ZYXWVUTSRQPONMLKJIHGFEDCBA9876543210123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"[35 + value % base];
+        value /= base;
+    } while ( value );
+    // Terminating the string.
+    *ptr-- = '\0';
+    // Invert the numbers.
+    while ( low < ptr )
+    {
+        char tmp = *low;
+        *low++ = *ptr;
+        *ptr-- = tmp;
+    }
+    return rc;
+}
+
+unsigned int strlen(const char* str){
+    return getstrsz(str);
+}
 
 void *memcpy(void *dest, const void *src, size_t n) {
     uint8_t *restrict pdest = (uint8_t *restrict)dest;

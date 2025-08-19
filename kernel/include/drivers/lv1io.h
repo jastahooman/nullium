@@ -20,8 +20,19 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-
-extern const char* bootLdrName;
+extern const char* BootProtocol;
+extern const char* PCtype;
+extern const char* PCfirmware;
 extern const char* CPUArch;
 
-extern struct gfx_mode gfx_buffer_instance;
+
+void gfx_plotPixel(uint64_t x, uint64_t y, uint32_t color);
+uint32_t gfx_getPixel(uint64_t x, uint64_t y);
+
+
+struct nm_meminfo{
+    uint64_t mem_lower;
+    uint64_t mem_upper;
+    uint64_t mem_total;
+};
+extern struct nm_meminfo mem_Info;

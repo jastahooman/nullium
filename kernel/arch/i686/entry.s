@@ -34,9 +34,9 @@ MB_Header:
     DD MB_HEADER_LENGTH
     DD MB_CHECKSUM
 
-extern _start
-extern _end_data
-extern _end
+extern ld_start
+extern ld_end_data
+extern ld_end
 
 ADDR_Tag:
     DW 2
@@ -44,9 +44,9 @@ ADDR_Tag:
     DD (ADDR_TagEnd - ADDR_Tag)
 
     DD MB_Header
-    DD _start
-    DD _end_data
-    DD _end
+    DD ld_start
+    DD ld_end_data
+    DD ld_end
 ADDR_TagEnd:
 
 ENTRYADDR_Tag:

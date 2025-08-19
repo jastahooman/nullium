@@ -21,6 +21,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-extern uint32_t ld_sbss;
-extern uint32_t ld_endbss;
-extern uint32_t ld_endkernel;
+extern const uint32_t ld_start;
+extern const uint32_t ld_end_data;
+extern const uint32_t ld_endbss;
+extern const uint32_t ld_end;

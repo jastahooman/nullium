@@ -1,6 +1,13 @@
 {
     "files.associations": {
         "krnlbitmaps.h": "c",
-        "numbers": "c"
+        "numbers": "c",
+        "stdbool.h": "c",
+        "lv1io.h": "c",
+        "graphics.h": "c",
+        "utils.h": "c",
+        "compare": "c",
+        "cstdint": "c",
+        "format": "c"
     }
 }

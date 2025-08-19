@@ -21,3 +21,5 @@ void init_GDT();
 void init_IDT();
 void PIT_Init();
 void PS2_Init();
+void init_paging();
+void init_mem();

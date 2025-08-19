@@ -31,6 +31,11 @@ extern long gfx_resX;
 extern long gfx_resY;
 extern long gfx_bpp;
 
+struct nm_meminfo{
+  uint64_t mem_lower;
+  uint64_t mem_upper;
+  uint64_t mem_total;
+};
 
 struct nm_boot_fb{
     uint16_t type;
@@ -42,8 +47,9 @@ struct nm_boot_fb{
     void * addr;
 };
 
-struct nm_boot_fb fb_Info;
 
+struct nm_boot_fb fb_Info;
+struct nm_meminfo mem_Info;
 extern void stage2_boot(void);
 
 #define SCREEN_RESX 1024
@@ -106,7 +112,11 @@ void stage1_boot (unsigned long magic, unsigned long addr){
         switch (tag->type){ 
         case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
           {
-          struct multiboot_tag_basic_meminfo meminfo;
+          struct multiboot_tag_basic_meminfo *meminfo = (struct multiboot_tag_basic_meminfo *) tag;
+          mem_Info.mem_lower = meminfo->mem_lower;
+          mem_Info.mem_upper = meminfo->mem_upper;
+          mem_Info.mem_total = meminfo->mem_lower + meminfo->mem_upper;
+
           break;
           }
         case MULTIBOOT_TAG_TYPE_FRAMEBUFFER:
@@ -121,7 +131,7 @@ void stage1_boot (unsigned long magic, unsigned long addr){
             fb_Info.pitch = tagfb->common.framebuffer_pitch;
             fb_Info.depth = tagfb->common.framebuffer_bpp;
             fb_Info.addr = (void *) (unsigned long) tagfb->common.framebuffer_addr;
-            
+            //fb_Info.addr += 0xC0000000;
 
             switch (tagfb->common.framebuffer_type)
               {
@@ -174,7 +184,7 @@ void stage1_boot (unsigned long magic, unsigned long addr){
 
     BootProtocol = "GNU Multiboot2";
     PCtype = "IBM PC or compatible";
-    PCfirmware = "BIOS";
+    PCfirmware = "BIOS or UEFI in CSM mode";
     CPUArch = "32-bit x86";
 
     stage2_boot();

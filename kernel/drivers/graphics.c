@@ -147,7 +147,7 @@ void putstr(const char* str, uint64_t px, uint64_t py, uint32_t color){
             switch (str[idx]){
 
             case '\n':
-                py += font_height + 4;
+                py += font_height + 5;
                 x = px;
                 y = py;
 

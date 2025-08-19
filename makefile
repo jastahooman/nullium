@@ -74,7 +74,7 @@ bin-i686:
 	$(GCC) -c $(KERNEL)stage3/stdio.c -o $(OUT)$(KERNEL)stdio.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
 	
 	$(GCC) -c $(KERNEL)drivers/timer.c -o $(OUT)$(KERNEL)timer.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
-	
+	$(GCC) -c $(KERNEL)drivers/memmgr.c -o $(OUT)$(KERNEL)memmgr.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
 
 
 
@@ -96,8 +96,10 @@ bin-i686:
 	
 	$(GCC) -c $(KERNEL)drivers/PS2-x86.c -o $(OUT)$(KERNEL)PS2-x86.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
 	
-		
-	$(GCC) -c $(KERNEL)drivers/memory.c -o $(OUT)$(KERNEL)memory.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
+
+	$(GCC) -c $(KERNEL)arch/i686/paging.c -o $(OUT)$(KERNEL)paging.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fPIC -I kernel/include
+	$(NASM) -felf32 $(KERNEL)arch/i686/paging.s -o $(OUT)$(KERNEL)pagingASM.o
+	
 
 
 mboot2-bin:
@@ -124,6 +126,9 @@ mboot2-bin:
 		$(OUT)$(KERNEL)timer.o\
 		$(OUT)$(KERNEL)PS2-x86.o\
 		$(OUT)$(KERNEL)stage3.o\
+		$(OUT)$(KERNEL)paging.o\
+		$(OUT)$(KERNEL)pagingASM.o\
+		$(OUT)$(KERNEL)memmgr.o\
 	 -lgcc -fPIC
 
 	

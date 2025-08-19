@@ -16,15 +16,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <drivers/ldata.h>
 #include <stdint.h>
-#include <stddef.h>
 #include <stdbool.h>
 
-extern const char* BootProtocol;
-extern const char* PCtype;
-extern const char* PCfirmware;
-extern const char* CPUArch;
-
-
-void gfx_plotPixel(uint64_t x, uint64_t y, uint32_t color);
-uint32_t gfx_getPixel(uint64_t x, uint64_t y);
+extern bool mem_locked;
