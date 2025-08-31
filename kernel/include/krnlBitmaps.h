@@ -27,10 +27,6 @@ extern uint8_t font_height;
 extern uint8_t cursor_width;
 extern uint8_t cursor_height;
 
-extern uint8_t cursors[1][165];
-extern bool font_regular[100][77];
-extern bool font_textmode[100][35];
+extern uint8_t font_regular[100][11];
 
 extern char fontMap[100];
-
-extern bool menuBtn[144];

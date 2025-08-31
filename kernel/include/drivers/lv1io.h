@@ -26,9 +26,8 @@ extern const char* PCfirmware;
 extern const char* CPUArch;
 
 
-void gfx_plotPixel(uint64_t x, uint64_t y, uint32_t color);
-uint32_t gfx_getPixel(uint64_t x, uint64_t y);
-
+void gfx_plotPixelD(uint64_t x, uint64_t y, uint32_t color);
+uint32_t gfx_getPixelD(uint64_t x, uint64_t y);
 
 struct nm_meminfo{
     uint64_t mem_lower;
@@ -36,3 +35,30 @@ struct nm_meminfo{
     uint64_t mem_total;
 };
 extern struct nm_meminfo mem_Info;
+
+#define CPUARCH_i386 0
+#define CPUARCH_x86_64 1
+
+
+
+extern uint32_t total_tags;
+extern uint16_t memmap_entries;
+
+extern uint8_t cpuarch;
+
+struct memmap_entry_x86
+{
+  uint64_t addr;
+  uint64_t len;
+  #define MULTIBOOT_MEMORY_AVAILABLE              1
+  #define MULTIBOOT_MEMORY_RESERVED               2
+  #define MULTIBOOT_MEMORY_ACPI_RECLAIMABLE       3
+  #define MULTIBOOT_MEMORY_NVS                    4
+  #define MULTIBOOT_MEMORY_BADRAM                 5
+  uint32_t type;
+  uint32_t zero;
+};
+
+typedef struct memmap_entry_x86 memmap_entry_t;
+
+extern memmap_entry_t memmap[20];

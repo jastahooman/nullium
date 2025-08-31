@@ -1,5 +1,5 @@
 /*
-    The Nullium Operating System
+    Nullium Kernel Bitmaps
     Copyright (C) 2025, jastahooman
 
     This program is free software: you can redistribute it and/or modify
@@ -16,10 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <stdbool.h>
+#include <stdint.h>
 
-void init_GDT();
-void init_IDT();
-void PIT_Init();
-void PS2_Init();
-void init_paging();
-void init_mem();
+void renderTerm();

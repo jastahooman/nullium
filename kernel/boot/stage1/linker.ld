@@ -6,7 +6,7 @@ ENTRY(_OS_Prep)
 SECTIONS
 {
 
-	. = 2M;
+	. = 1M;
 
     ld_start = .;
     

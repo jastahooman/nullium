@@ -77,6 +77,9 @@ extern void isr29();
 extern void isr30();
 extern void isr31();
 
+extern void softwareISR();
+extern void guiISR();
+
 extern void isr128();
 extern void isr177();
 
@@ -96,3 +99,4 @@ extern void irq12();
 extern void irq13();
 extern void irq14();
 extern void irq15();
+

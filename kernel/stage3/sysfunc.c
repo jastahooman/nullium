@@ -15,11 +15,24 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-
-#include <drivers/ldata.h>
+#include <drivers/idt.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <drivers/graphics.h>
+#include <drivers/driversdkmnt-x86.h>
 
-void init_paging(){
+#define SYSCALL_EXIT 1
+#define SYSCALL_DRIVER_SETUP 2
+
+void syscall_handler(struct InterruptRegisters* regs){
+    switch (regs->eax){
+        case SYSCALL_DRIVER_SETUP:
+            switch (regs->ecx){
+                case DRIVER_SDK_DEVICETYPE_KEYBOARD:
+                    putstr("Keyboard", 5, 5, 0xFFFFFF);
+                break;
+            }
+        break;
+    }
     
 }

@@ -14,32 +14,12 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/    
-    
+*/
 
-// Window manager...
-#include <drivers/lv1io.h>
-#include <drivers/graphics.h>
-#include <drivers/lv2io.h>
-#include <krnlBitmaps.h>
+#include <stdint.h>
+#include <stdbool.h>
 
-void drawMenuIcn(bool inverted){
-    unsigned int idx = 0;
-    for(unsigned int y = 0; y < 12; y++){
 
-        for(unsigned int x = 0; x < 12; x++){
-            if (menuBtn[idx] == 1){
-                gfx_plotPixel(x + 2, y + (gfx_resY - 2) - 12, 0x000000);
-            }
-            idx++;
-        }
-    }
-}
 
-void drawMenuBar(){
-    gfx_putRect(0, gfx_resY - 19, gfx_resX, 19, 0x000000);
-    gfx_putRect(0, gfx_resY - 17, gfx_resX, 17, 0xFFFFFF);
-
-    drawMenuIcn(false);
-
-}
+int freep(void* ptr);
+void* kmalloc(uint32_t pages);

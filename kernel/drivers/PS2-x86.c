@@ -213,6 +213,7 @@ uint8_t mouse_read()
   mouse_wait(0); 
   return inb(0x60);
 }
+#include <drivers/driversdkmnt-x86.h>
 
 void PS2_Init(){
 
@@ -227,7 +228,7 @@ void PS2_Init(){
     }
 
     IRQ_setHandler(1, &keyboardHandler);
-
+    dsdk_setup(DRIVER_SDK_DEVICETYPE_KEYBOARD);
     // Mouse:
 
     uint8_t status;  //unsigned char
@@ -256,5 +257,6 @@ void PS2_Init(){
 
     //Setup the mouse handler
     IRQ_setHandler(12, &mouse_handler);
+    dsdk_setup(DRIVER_SDK_DEVICETYPE_MOUSE);
 
 }

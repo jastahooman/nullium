@@ -85,6 +85,22 @@ ISR_NOERRCODE 31
 ISR_NOERRCODE 128
 ISR_NOERRCODE 177
 
+global softwareISR
+softwareISR:
+    CLI
+    PUSH LONG 0
+    PUSH LONG 69
+    JMP ISR_CommonStub
+
+global guiISR
+guiISR:
+    CLI
+    PUSH LONG 0
+    PUSH LONG 69
+    JMP ISR_CommonStub
+
+ISR_NOERRCODE 69
+
 IRQ 0, 32
 IRQ   1,    33
 IRQ   2,    34
@@ -101,6 +117,8 @@ IRQ  12,    44
 IRQ  13,    45
 IRQ  14,    46
 IRQ  15,    47
+
+IRQ  17,    49
 
 extern ISR_Handler
 ISR_CommonStub:

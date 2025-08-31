@@ -1,5 +1,6 @@
 /*
-    The Nullium Operating System
+    The Nullium Driver Software Development Kit
+
     Copyright (C) 2025, jastahooman
 
     This program is free software: you can redistribute it and/or modify
@@ -16,19 +17,15 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <stdint.h>
-#include <stddef.h>
+
+#define DRIVER_SDK_DEVICETYPE_KEYBOARD 0
+#define DRIVER_SDK_DEVICETYPE_MOUSE 1
+#define DRIVER_SDK_DEVICETYPE_STORMEDIUM 2
+#define DRIVER_SDK_DEVICETYPE_CDROM 3
+#define DRIVER_SDK_DEVICETYPE_GPU 4
+#define DRIVER_SDK_DEVICETYPE_FILESYSTEM 5
+
 #include <stdbool.h>
+#include <stdint.h>
 
-void *memcpy(void *dest, const void *src, size_t n);
-void *memset(void *s, int c, size_t n);
-void *memmove(void *dest, const void *src, size_t n);
-int memcmp(const void *s1, const void *s2, size_t n);
-unsigned int getstrsz(const char* str);
-uint8_t getBit(uint8_t num, uint8_t bitpos);
-
-unsigned int strlen(const char* str);
-char * itoa( int value, char * str, int base );
-
-#define CEIL_DIV(a, b) (((a) + (b) - 1) / (b))
-#define KIB_TO_BYTES(kib) ((uint64_t)kib * 1024)
+void dsdk_setup(uint16_t devicetype);

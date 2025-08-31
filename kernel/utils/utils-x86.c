@@ -40,6 +40,28 @@ uint8_t inb(uint16_t port)
                    : "memory");
     return ret;
 }
+
+
+
+
+uint32_t inl(uint16_t port) {
+    uint32_t result;
+    __asm__ volatile (
+        "inl %[port], %[result]"  
+        : [result] "=a" (result)
+        : [port] "d" (port)     
+    );
+    return result;
+}
+
+void outl(uint16_t port, uint32_t value) {
+    __asm__ volatile (
+        "outl %0, %1"  
+        :
+        : "a" (value), "Nd" (port)  
+    );
+}
+
 void io_wait(void){
     outb(0x80, 0);
 }

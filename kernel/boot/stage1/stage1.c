@@ -21,6 +21,7 @@
 #include <utils/utils.h>
 #include <utils/utils-x86.h>
 #include "multiboot2.h"
+#include <drivers/graphics.h>
 
 const char* PCfirmware;
 const char* BootProtocol;
@@ -52,13 +53,10 @@ struct nm_boot_fb fb_Info;
 struct nm_meminfo mem_Info;
 extern void stage2_boot(void);
 
-#define SCREEN_RESX 1024
-#define SCREEN_RESY 768
-
-uint32_t screen_buffer[SCREEN_RESX * SCREEN_RESY];
 
 
-// direct framebuffer commands
+
+
 
 uint32_t gfx_getPixelD(uint64_t x, uint64_t y){
   if (!(x > fb_Info.width || y > fb_Info.height)){
@@ -69,35 +67,57 @@ uint32_t gfx_getPixelD(uint64_t x, uint64_t y){
   return 0;
 }
 
+extern uint32_t cursor_posX;
+extern uint32_t cursor_posY;
+
+extern uint32_t cursor_posX_p;
+extern uint32_t cursor_posY_p;
+
+
+uint32_t gfx_cursMkBuffer(uint32_t px, uint32_t py);
+uint32_t gfx_restoreBuffer(uint32_t px, uint32_t py);
+
+
 void gfx_plotPixelD(uint64_t x, uint64_t y, uint32_t color){
+
+    bool bufferOW = false;
+
     if (!(x > fb_Info.width || y > fb_Info.height)){
         volatile uint32_t *fb_ptr = fb_Info.addr;
         fb_ptr[y * (fb_Info.pitch / 4) + x] = color;
     }
 }
 
-// buffer 2 commands
 
-uint32_t gfx_getPixel(uint64_t x, uint64_t y){
-  if (!(x > fb_Info.width || y > fb_Info.height)){
-        return screen_buffer[gfx_resX * y + x];
-  }
-  return 0;
-}
-
-void gfx_plotPixel(uint64_t x, uint64_t y, uint32_t color){
-    if (!(x > fb_Info.width || y > fb_Info.height)){
-      screen_buffer[gfx_resX * y + x] = color;
-      gfx_plotPixelD(x, y, color);
-    }
+struct VBEdriverInfo{
     
-}
+};
 
+struct memmap_entry_x86
+{
+  uint64_t addr;
+  uint64_t len;
+  #define MULTIBOOT_MEMORY_AVAILABLE              1
+  #define MULTIBOOT_MEMORY_RESERVED               2
+  #define MULTIBOOT_MEMORY_ACPI_RECLAIMABLE       3
+  #define MULTIBOOT_MEMORY_NVS                    4
+  #define MULTIBOOT_MEMORY_BADRAM                 5
+  uint32_t type;
+  uint32_t zero;
+};
 
+typedef struct memmap_entry_x86 memmap_entry_t;
 
+uint8_t cpuarch;
+memmap_entry_t memmap[20];
+
+uint16_t memmap_entries = 0;
+uint32_t total_tags = 0;
 
 void stage1_boot (unsigned long magic, unsigned long addr){  
     struct multiboot_tag *tag;
+
+
 
     if (magic != MULTIBOOT2_BOOTLOADER_MAGIC)
     {
@@ -111,14 +131,20 @@ void stage1_boot (unsigned long magic, unsigned long addr){
     {
         switch (tag->type){ 
         case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
-          {
+          
           struct multiboot_tag_basic_meminfo *meminfo = (struct multiboot_tag_basic_meminfo *) tag;
           mem_Info.mem_lower = meminfo->mem_lower;
           mem_Info.mem_upper = meminfo->mem_upper;
           mem_Info.mem_total = meminfo->mem_lower + meminfo->mem_upper;
-
+          
           break;
-          }
+
+
+
+        case MULTIBOOT_TAG_TYPE_VBE:
+          struct multiboot_tag_vbe* vbe_modeInfo = (struct multiboot_tag_vbe*) tag;
+        break;
+
         case MULTIBOOT_TAG_TYPE_FRAMEBUFFER:
           {
             multiboot_uint32_t color;
@@ -136,7 +162,7 @@ void stage1_boot (unsigned long magic, unsigned long addr){
             switch (tagfb->common.framebuffer_type)
               {
               case MULTIBOOT_FRAMEBUFFER_TYPE_INDEXED:
-                {
+                
                   unsigned best_distance, distance;
                   struct multiboot_color *palette;
             
@@ -159,8 +185,9 @@ void stage1_boot (unsigned long magic, unsigned long addr){
                           best_distance = distance;
                         }
                     }
-                }
-                break;
+              
+              break;
+              
 
               case MULTIBOOT_FRAMEBUFFER_TYPE_RGB:
                 color = ((1 << tagfb->framebuffer_blue_mask_size) - 1) 
@@ -171,8 +198,37 @@ void stage1_boot (unsigned long magic, unsigned long addr){
                 color = 0xffffffff;
                 break;
             }
+
+            break;
           }
+          case MULTIBOOT_TAG_TYPE_MMAP:
+
+              memmap_entries = 0;
+              multiboot_memory_map_t *mmap;
+
+
+                    
+            for (mmap = ((struct multiboot_tag_mmap *) tag)->entries;
+              (multiboot_uint8_t *) mmap 
+                < (multiboot_uint8_t *) tag + tag->size;
+              mmap = (multiboot_memory_map_t *) 
+                ((unsigned long) mmap
+                + ((struct multiboot_tag_mmap *) tag)->entry_size)){
+
+                  memmap[memmap_entries].addr = mmap->addr;
+                  memmap[memmap_entries].len = mmap->len;
+                  memmap[memmap_entries].type = mmap->type;
+
+                  memmap_entries++;
+                      
+            }
+
+              
+
+              break;
         }
+        
+        total_tags++;
         
     }
 

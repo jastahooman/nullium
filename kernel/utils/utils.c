@@ -21,7 +21,7 @@
 #include <stdbool.h>
 
 uint8_t getBit(uint8_t num, uint8_t bitpos){
-    return ((num & (1 << (bitpos-1)) ? 1 : 0));
+    return ((num & (1 << (bitpos - 1)) ? 1 : 0));
 }
 
 

@@ -1,5 +1,5 @@
 /*
-    The Nullium Operating System
+    The Nullium Terminal Emulator
     Copyright (C) 2025, jastahooman
 
     This program is free software: you can redistribute it and/or modify
@@ -17,18 +17,28 @@
 */
 
 #include <stdint.h>
-#include <stddef.h>
 #include <stdbool.h>
+#include <drivers/graphics.h>
+#include <krnlBitmaps.h>
+#include <drivers/lv2io.h>
 
-void *memcpy(void *dest, const void *src, size_t n);
-void *memset(void *s, int c, size_t n);
-void *memmove(void *dest, const void *src, size_t n);
-int memcmp(const void *s1, const void *s2, size_t n);
-unsigned int getstrsz(const char* str);
-uint8_t getBit(uint8_t num, uint8_t bitpos);
+uint8_t textmode_fb[24576]; // replace with something not statically allocated
 
-unsigned int strlen(const char* str);
-char * itoa( int value, char * str, int base );
+struct terminal_char{
+    uint8_t ltr;
+    uint8_t bgcolor;
+    uint8_t fgcolor;
+};
 
-#define CEIL_DIV(a, b) (((a) + (b) - 1) / (b))
-#define KIB_TO_BYTES(kib) ((uint64_t)kib * 1024)
+typedef struct terminal_char terminal_char_t;
+
+void renderTerm(){
+    uint32_t x;
+    uint32_t y;
+    for (y = 0; y < gfx_resY / (font_height + 1); y++){
+        for (x = 0; x < gfx_resX / (font_width + 1); x++){
+            gfx_putRect(x * (font_width + 1), y * (font_height + 1), font_width + 1, font_height + 1, 0xFF0000);
+            putstr("A", x * (font_width + 1), y * (font_height + 1), 0xFFFFFF);
+        }
+    }
+}

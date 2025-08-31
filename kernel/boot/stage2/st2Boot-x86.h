@@ -16,8 +16,10 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <stdint.h>
-#include <stdbool.h>
 
-extern void drawMenuBar();
-void drawMenuIcn(bool inverted);
+void init_GDT();
+void init_IDT();
+void PIT_Init();
+void PS2_Init();
+void pmm_Init();
+void init_Paging();

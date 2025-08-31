@@ -81,12 +81,17 @@ MB_HeaderEnd:
 section .text
 
 OS_Prep:
-    jmp OS_Start
 
-OS_Start:
     mov esp, stack_top
     push ebx
     push eax
+
+    
+
+    jmp OS_Start
+
+OS_Start:
+
     extern stage1_boot
     call stage1_boot
 
@@ -99,5 +104,5 @@ OS_Halt:
 section .bss
 align 16
 stack_bottom:
-    RESB 16384 * 8
+    resb 8192
 stack_top:

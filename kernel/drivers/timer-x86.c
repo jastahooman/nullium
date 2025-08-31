@@ -35,12 +35,14 @@ void Timer_Reset(void){
 }
 
 extern void s3_tick(void);
-
+extern bool loaded3;
 void PIT_Tick(struct InterruptRegisters *regs){
     ticks += 1;
     ticks_NoReset =+ 1;
 
-    s3_tick();
+    if (loaded3){
+        s3_tick();
+    }
 }
 
 void PIT_Init(void){

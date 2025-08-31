@@ -114,6 +114,9 @@ void init_IDT(){
     IDT_SetGate(30, (uint32_t)isr30, 0x08, 0x8E);
     IDT_SetGate(31, (uint32_t)isr31, 0x08, 0x8E);
 
+    IDT_SetGate(69, (uint32_t)softwareISR, 0x08, 0x8E);
+    IDT_SetGate(80, (uint32_t)guiISR, 0x08, 0x8E);
+
     IDT_SetGate(32, (uint32_t)irq0, 0x08, 0x8E);
     IDT_SetGate(33, (uint32_t)irq1, 0x08, 0x8E);
     IDT_SetGate(34, (uint32_t)irq2, 0x08, 0x8E);
@@ -130,7 +133,6 @@ void init_IDT(){
     IDT_SetGate(45, (uint32_t)irq13, 0x08, 0x8E);
     IDT_SetGate(46, (uint32_t)irq14, 0x08, 0x8E);
     IDT_SetGate(47, (uint32_t)irq15, 0x08, 0x8E);
-
 
     IDT_SetGate(128, (uint32_t)isr128, 0x08, 0x8E); //System calls
     IDT_SetGate(177, (uint32_t)isr177, 0x08, 0x8E); //System calls
@@ -176,7 +178,13 @@ char* ISR_ExceptionMessages[] = {
 
 extern void crash(const char* str);
 
+extern void syscall_handler(struct InterruptRegisters* regs);
+
 void ISR_Handler(struct InterruptRegisters* regs){
+    if (regs->int_no == 69){
+        syscall_handler(regs);
+        
+    }
     if (regs->int_no < 32){
         crash(ISR_ExceptionMessages[regs->int_no]);
     }
@@ -194,6 +202,9 @@ void IRQ_setHandler (int irq, void (*handler)(struct InterruptRegisters *r)){
 void IRQ_rmHandler(int irq){
     irq_routines[irq] = 0;
 }
+
+
+
 void IRQ_Handler(struct InterruptRegisters* regs){
     void (*handler)(struct InterruptRegisters *regs);
 

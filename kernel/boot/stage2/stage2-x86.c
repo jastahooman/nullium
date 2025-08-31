@@ -20,7 +20,6 @@
 
 #include "st2Boot-x86.h"
 
-#include <stage3/winmgr.h>
 #include <utils/utils.h>
 #include <stdint.h>
 #include <stddef.h>
@@ -39,12 +38,21 @@ long gfx_resX;
 long gfx_resY;
 long gfx_bpp;
 
-struct os_bootParams bootParams;
 
 
 
+void crash(const char* str){
 
-void extCrash(const char* str){
+
+    for(unsigned int y = 0; y < gfx_resY; y += 2){
+        for(unsigned int x = 0; x < gfx_resX; x += 2){
+            gfx_plotPixel(x + 1, y, 0x000000);
+        }
+        for(unsigned int x = 0; x < gfx_resX; x += 2){
+            gfx_plotPixel(x,  y + 1, 0x000000);
+        }
+    }
+
     gfx_putRect(0, 0, gfx_resX, gfx_resY, 0x222222);
     uint32_t y = 5;
     putstr("Panic!", 5, y, 0xFFFFFF);
@@ -103,54 +111,6 @@ void extCrash(const char* str){
     putstr("0x", 300, y, 0xFFFFFF);
     putstr(itoa((int)&ld_end, mem, 16), 300 + ((font_width + 1) * 2), y, 0xFFFFFF);
     
-
-
-    y += (font_height + 5) * 2;
-
-    asm ("cli");
-    for (;;) {
-        asm ("hlt");
-    }
-
-}
-
-void crash(const char* str){
-
-    if (bootParams.extCrashData){
-        extCrash(str);
-    }
-    
-    for(unsigned int y = 0; y < gfx_resY; y += 2){
-        for(unsigned int x = 0; x < gfx_resX; x += 2){
-            gfx_plotPixel(x + 1, y, 0x000000);
-        }
-        for(unsigned int x = 0; x < gfx_resX; x += 2){
-            gfx_plotPixel(x,  y + 1, 0x000000);
-        }
-    }
-
-
-    
-    gfx_putRect(gfx_resX / 4 - 1, gfx_resY / 4 - 1, gfx_resX / 2 + 2, gfx_resY / 2 + 2 , 0x000000);
-    gfx_putRect(gfx_resX / 4, gfx_resY / 4, gfx_resX / 2, gfx_resY / 2 , 0xCCCCCC);
-    
-    
-
-    putstr("Panic!", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5, 0x000000);
-    putstr("System architecture: ", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5 + ((font_height + 5) * 1), 0x000000);
-    putstr(PCtype, (gfx_resX / 4) + 5 + ((font_width + 1) * 0), (gfx_resY / 4) + 5 + ((font_height + 5) * 2), 0x000000);
-    putstr(CPUArch, (gfx_resX / 4) + 5 + ((font_width + 1) * 0), (gfx_resY / 4) + 5 + ((font_height + 5) * 3), 0x000000);
-
-    putstr("OS version:\n    Nullium\n    version 1.0 Update 0", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5 + ((font_height + 5) * 5), 0x000000);
-    
-
-    putstr("Crash Reason: ", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5 + ((font_height + 5) * 9), 0x000000);
-    putstr(str, (gfx_resX / 4) + 5 + ((font_width + 1) * 14), (gfx_resY / 4) + 5 + ((font_height + 5) * 9), 0x000000);
-
-    putstr("OS Links:\nGitHub: https://github.com/jastahooman/nullium", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5 + ((font_height + 5) * 11), 0x000000);
-    putstr("Web site: https://example.com", (gfx_resX / 4) + 5, (gfx_resY / 4) + 5 + ((font_height + 5) * 13), 0x000000);
-    
-
     
     asm ("cli");
     for (;;) {
@@ -158,25 +118,23 @@ void crash(const char* str){
     }
 }
 
-extern int stage3_boot(struct os_bootParams bootConf);
+extern int stage3_boot();
+
+struct driverStruct{
+    char* driverName;
+    char* driverCreator;
+    char* driverCopyright;
+    uint16_t ver;
+    uint8_t type;
+};
 
 void stage2_boot(void){
-    bootParams.extCrashData = true;
+
+
     //gfx_putRect(0, 0, gfx_resX, gfx_resY, 0x5500AA);
-    gfx_putRect(0, 0, gfx_resX, gfx_resY, 0x0055AA);
+    gfx_putRect(0, 0, gfx_resX, gfx_resY, 0x000000);    
 
-    unsigned int idx = 0;
-    for(unsigned int y = 0; y < 12; y++){
-
-        for(unsigned int x = 0; x < 12; x++){
-            if (menuBtn[idx] == 1){
-                gfx_plotPixel(x + (gfx_resX/2) - 12 , y + (gfx_resY/2) - 12, 0x000000);
-            }
-            idx++;
-        }
-    }
-
-
+    
     init_GDT();
 
     
@@ -190,44 +148,22 @@ void stage2_boot(void){
     sleep(5);
     PS2_Init();
 
-    init_mem();
-    init_paging();
+    
 
+    pmm_Init();
+
+    init_Paging();
+    
     sleep(30);
 
-    bootParams.extCrashData = false;
-    idx = 0;
-    for(unsigned int y = 0; y < 12; y++){
 
-        for(unsigned int x = 0; x < 12; x++){
-            if (menuBtn[idx] == 1){
-                gfx_plotPixel(x + (gfx_resX/2) - 12 , y + (gfx_resY/2) - 12, 0xFFFFFF);
-            }
-            idx++;
-        }
-    }
 
     sleep(60);
-
-    bootParams.disableSysExt = false;
-    bootParams.extCrashData = false;
-
     uint32_t y = 5;
     y += (font_height + 5) * 2;
 
-    if (kb_detectPress('c')){
-        bootParams.extCrashData = true;
-        shadowTxt("Extended crash info.", 5, y, 0xFFFFFF, 0x000000);
-        y += font_height + 5;
-    }
-    if (kb_detectPress('e')){
-        bootParams.disableSysExt = true;
-        shadowTxt("Extensions off...", 5, y, 0xFFFFFF, 0x000000);
-        y += font_height + 5;
-    }
-
     sleep(60);
-    stage3_boot(bootParams);
+    stage3_boot();
 
 
     

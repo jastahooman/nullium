@@ -8,6 +8,27 @@
         "utils.h": "c",
         "compare": "c",
         "cstdint": "c",
-        "format": "c"
+        "format": "c",
+        "pmm.h": "c",
+        "mouse.h": "c",
+        "array": "c",
+        "chrono": "c",
+        "deque": "c",
+        "forward_list": "c",
+        "list": "c",
+        "string": "c",
+        "unordered_map": "c",
+        "unordered_set": "c",
+        "vector": "c",
+        "string_view": "c",
+        "initializer_list": "c",
+        "ranges": "c",
+        "span": "c",
+        "text_encoding": "c",
+        "valarray": "c",
+        "lv2io.h": "c",
+        "driversdkmnt-x86.h": "c",
+        "drivers.h": "c",
+        "bitset": "c"
     }
 }
