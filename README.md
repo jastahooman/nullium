@@ -1,6 +1,6 @@
 # The Nullium OS
 
-An A/UX inspired OS.
+A modular OS powered by a microkernel
 
 Readme coming later...
 
