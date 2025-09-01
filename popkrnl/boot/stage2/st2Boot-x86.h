@@ -24,3 +24,4 @@ void PS2_Init();
 void pmm_Init();
 void init_Paging();
 void sched_init();
+void init_vmm();

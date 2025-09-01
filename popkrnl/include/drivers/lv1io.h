@@ -62,3 +62,16 @@ struct memmap_entry_x86
 typedef struct memmap_entry_x86 memmap_entry_t;
 
 extern memmap_entry_t memmap[20];
+
+struct nm_boot_fb{
+    uint16_t type;
+    uint16_t flags;
+    uint32_t pitch;
+    uint32_t width;
+    uint32_t height;
+    uint32_t depth;
+    void * addr;
+};
+
+
+extern struct nm_boot_fb fb_Info;

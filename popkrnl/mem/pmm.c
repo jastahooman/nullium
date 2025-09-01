@@ -151,42 +151,6 @@ uint32_t idx = 0;
 
 
 
-void* palloc(uint32_t pages){
-    freelist_t* baseList = &freelist; // jank
-
-    uint16_t idx = 0;
-
-    while (true){
-        
-        if (getBit(baseList->freelist[idx].flags, 1) && getBit(baseList->freelist[idx].flags, 2)){
-            if (!(baseList->freelist[idx].end - baseList->freelist[idx].start < pages)){
-                break;
-            }
-        }
-        
-        
-        idx += 1;
-
-
-
-    }
-
-    uint32_t flIdx = freelist_split(idx, baseList->freelist[idx].start, baseList->freelist[idx].start + pages);
-
-    terminal_print("[DBG] ", 0, 12);
-    terminal_print("PMM: Reserved ", 0, 15);
-    terminal_print(itoa(pages, "0xFFFFFF", 10), 0, 15);
-    terminal_print(" page(s) (starts at page 0x", 0, 15);
-    terminal_print(itoa((baseList->freelist[flIdx].start), "0xFFFFFFFFFFF", 16), 0, 15);
-    terminal_print(")\n", 0, 15);
-
-    freelist_housekeep();
-
-    
-
-    return (void*)(baseList->freelist[flIdx].start * 4096);
-}
-
 uint16_t freelist_findItem(uint32_t page){
 
     uint32_t lidx = 0;
@@ -197,6 +161,36 @@ uint16_t freelist_findItem(uint32_t page){
         }
     }
     return lidx;
+}
+
+
+void* palloc(uint32_t pages){
+    freelist_t* baseList = &freelist; // jank
+
+    uint16_t idx = freelist_findItem(0);
+
+    while (true){
+        
+        if (getBit(baseList->freelist[idx].flags, 1) && getBit(baseList->freelist[idx].flags, 2)){
+            if (!(baseList->freelist[idx].end - baseList->freelist[idx].start < pages)){
+                break;
+            }
+        }
+        
+        
+        idx = freelist_findItem(freelist.freelist[idx].end);
+
+
+
+    }
+
+    uint32_t flIdx = freelist_split(idx, baseList->freelist[idx].start, baseList->freelist[idx].start + pages);
+
+    freelist_housekeep();
+
+    
+
+    return (void*)(baseList->freelist[flIdx].start * 4096);
 }
 
 
@@ -243,13 +237,6 @@ int freep(void* ptr){
     uint32_t pageid = ((uint32_t)ptr / 4096);
     freelist_t* startList = &freelist;
 
-    terminal_print("[DBG] ", 0, 12);
-    terminal_print("PMM: Request to free page ", 0, 15);
-    terminal_print(itoa(pageid, "0xFFFFFFFFFFF", 16), 0, 15);
-    terminal_print(".\n", 0, 15);
-
-    terminal_print("[DBG] ", 0, 12);
-    terminal_print("Checking if page is valid to free..\n", 0, 15);
 
     bool fail = true;
     uint32_t idx = 0;
@@ -257,21 +244,15 @@ int freep(void* ptr){
     for (idx = 0; idx < LIST_MAX; idx++){
         if (startList->freelist[idx].start == pageid){
             fail = false;
-            terminal_print("[DBG] ", 0, 12);
-            terminal_print("Needed page found in list.\n", 0, 15);
             break;
         }
     }
 
     if (fail){
-        terminal_print("[DBG] ", 0, 12);
-        terminal_print("Page search failed.\n", 0, 15);
         return 1;
     }
     
     startList->freelist[idx].flags |= FLAG_FREE;
-    terminal_print("[DBG] ", 0, 12);
-    terminal_print("Page Freed OK.\n", 0, 15);
 
     freelist_housekeep();
 

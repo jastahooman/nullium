@@ -79,7 +79,9 @@ bin-i686:
 	
 
 
-	$(GCC) -c $(KERNEL)mem/paging.c -o $(OUT)$(KERNEL)paging.o $(GCC_86_SETTINGS)
+	$(GCC) -c $(KERNEL)mem/vmm.c -o $(OUT)$(KERNEL)vmm.o $(GCC_86_SETTINGS)
+	$(NASM) -felf32 $(KERNEL)mem/paging.s -o $(OUT)$(KERNEL)pagingASM.o
+
 	$(GCC) -c $(KERNEL)stage3/nterm.c -o $(OUT)$(KERNEL)nterm.o $(GCC_86_SETTINGS)
 
 mboot2-bin:
@@ -107,9 +109,10 @@ mboot2-bin:
 		$(OUT)$(KERNEL)PS2-x86.o\
 		$(OUT)$(KERNEL)stage3.o\
 		$(OUT)$(KERNEL)pmm.o\
-		$(OUT)$(KERNEL)paging.o\
+		$(OUT)$(KERNEL)vmm.o\
 		$(OUT)$(KERNEL)nterm.o\
 		$(OUT)$(KERNEL)scheduler.o\
+		$(OUT)$(KERNEL)pagingASM.o\
 
 	 -lgcc -fPIC
 

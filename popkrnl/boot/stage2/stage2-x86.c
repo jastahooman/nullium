@@ -162,10 +162,15 @@ void stage2_boot(void){
     pmm_Init();
     terminal_print("PMM init ... OK.\n", 0, 15);
     
-    
 
-    //init_Paging();
-    //terminal_print("Paging init ... OK.\n", 0, 15);
+    init_Paging();
+    
+    terminal_print("Paging init ... OK.\n", 0, 15);
+    
+    //init_vmm();
+    //terminal_print("VMM ... OK.\n", 0, 15);
+
+
     for(;;);
 
     sleep(30);
